@@ -10,10 +10,10 @@ type Callback func(*State)
 type State struct {
 	Data interface{}
 
-	fnCloseRequested  func() bool
-	fnCurrent, fnNext Callback
-	fns               map[string]Callback
-	state             string
+	fnCloseRequested func() bool
+	fns              map[string]Callback
+	sCurrent, sNext  string
+	state            string
 }
 
 func New(fn func() bool) *State {
@@ -41,17 +41,20 @@ func (s *State) Register(name string, cb Callback) registrationBuilder {
 }
 
 func (s *State) Run() {
-	s.fnCurrent = s.fnNext
-	enter, eok := s.fns[s.state + "{"]
-	leave, lok := s.fns[s.state + "}"]
-	if eok {
-		enter(s)
-	}
-	for !s.fnCloseRequested() && s.fnNext == s.fnCurrent {
-		s.fnCurrent(s)
-	}
-	if lok {
-		leave(s)
+	s.sCurrent = s.sNext
+	main, mok := s.fns[s.state]
+	if mok {
+		enter, eok := s.fns[s.state + "{"]
+		leave, lok := s.fns[s.state + "}"]
+		if eok {
+			enter(s)
+		}
+		for !s.fnCloseRequested() && s.sNext == s.sCurrent {
+			main(s)
+		}
+		if lok {
+			leave(s)
+		}
 	}
 }
 
@@ -61,9 +64,8 @@ func (s *State) SetData(data interface{}) *State {
 }
 
 func (s *State) SetNext(state string, onFail ...onfail.OnFail) *State {
-	if fn, ok := s.fns[str.Simp(state)]; ok {
-		s.state = state
-		s.fnNext = fn
+	if _, ok := s.fns[str.Simp(state)]; ok {
+		s.sNext = state
 	} else {
 		failFunc := onfail.Panic
 		if len(onFail) > 0 {
