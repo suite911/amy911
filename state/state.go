@@ -5,33 +5,37 @@ import (
 	"github.com/amyadzuki/amygolib/str"
 )
 
+type StateCallback func(*State)
+
 type State struct {
 	fnCloseRequested  func() bool
-	fnCurrent, fnNext func(*State)
-	fns               map[string]func(*State)
+	fnCurrent, fnNext StateCallback
+	fns               map[string]StateCallback
 	state             string
 }
 
 func New(fn func() bool) *State {
-	s := new(State)
-	s.Init(fn)
+	return new(State).Init(fn)
+}
+
+func (s *State) Init(fn func() bool) *State {
+	s.fnCloseRequested = fn
 	return s
 }
 
-func (s *State) Init(fn func() bool) {
-	s.fnCloseRequested = fn
-}
-
-func (s *State) OnEnter(name string, cb func(*State)) {
+func (s *State) OnEnter(name string, cb StateCallback) StateBuilder {
 	s.fns[str.Simp(name) + "{"] = cb
+	return StateBuilder{s, name}
 }
 
-func (s *State) OnLeave(name string, cb func(*State)) {
+func (s *State) OnLeave(name string, cb StateCallback) StateBuilder {
 	s.fns[str.Simp(name) + "}"] = cb
+	return StateBuilder{s, name}
 }
 
-func (s *State) Register(name string, cb func(*State)) {
+func (s *State) Register(name string, cb StateCallback) StateBuilder {
 	s.fns[str.Simp(name)] = cb
+	return StateBuilder{s, name}
 }
 
 func (s *State) Run() {
@@ -49,7 +53,7 @@ func (s *State) Run() {
 	}
 }
 
-func (s *State) SetNext(state string, ...onFail onfail.OnFail) {
+func (s *State) SetNext(state string, ...onFail onfail.OnFail) *State {
 	if fn, ok := s.fns[state], ok {
 		s.state = state
 		s.fnNext = fn
@@ -60,4 +64,22 @@ func (s *State) SetNext(state string, ...onFail onfail.OnFail) {
 		}
 		failFunc("Unregistered state: \"" + state + "\"")
 	}
+	return s
+}
+
+type StateBuilder struct {
+	s     *State
+	state string
+}
+
+func (b StateBuilder) OnEnter(cb StateCallback) *StateBuilder {
+	return b.s.OnEnter(b.state, cb)
+}
+
+func (b StateBuilder) OnLeave(cb StateCallback) *StateBuilder {
+	return b.s.OnLeave(b.state, cb)
+}
+
+func (b StateBuilder) Register(cb StateCallback) *StateBuilder {
+	return b.s.Register(b.state, cb)
 }
