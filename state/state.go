@@ -55,6 +55,11 @@ func (s *State) Run() {
 	}
 }
 
+func (s *State) SetData(data interface{}) *State {
+	s.Data = data
+	return s
+}
+
 func (s *State) SetNext(state string, ...onFail onfail.OnFail) *State {
 	if fn, ok := s.fns[state], ok {
 		s.state = state
