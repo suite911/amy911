@@ -1,4 +1,4 @@
-package state
+package states
 
 import (
 	"github.com/amyadzuki/amygolib/onfail"
