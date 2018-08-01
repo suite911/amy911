@@ -75,7 +75,7 @@ func (s *State) SetNext(state string, onFail ...onfail.OnFail) *State {
 		if len(onFail) > 0 {
 			failFunc = onFail[0]
 		}
-		failFunc.Fail("Unregistered state: \"" + state + "\"")
+		failFunc.Fail(errors.New("Unregistered state: \"" + state + "\""))
 	}
 	return s
 }
