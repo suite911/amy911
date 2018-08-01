@@ -85,17 +85,17 @@ type registrationBuilder struct {
 	state string
 }
 
-func (b registrationBuilder) OnEnter(args ...interface{}) *registrationBuilder {
+func (b registrationBuilder) OnEnter(args ...interface{}) registrationBuilder {
 	a := b.reg(args...)
 	return b.s.OnEnter(a.state, a.cb)
 }
 
-func (b registrationBuilder) OnLeave(args ...interface{}) *registrationBuilder {
+func (b registrationBuilder) OnLeave(args ...interface{}) registrationBuilder {
 	a := b.reg(args...)
 	return b.s.OnLeave(a.state, a.cb)
 }
 
-func (b registrationBuilder) Register(args ...interface{}) *registrationBuilder {
+func (b registrationBuilder) Register(args ...interface{}) registrationBuilder {
 	a := b.reg(args...)
 	return b.s.Register(a.state, a.cb)
 }
