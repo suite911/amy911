@@ -67,11 +67,11 @@ func (s *State) SetNext(state string, onFail ...onfail.OnFail) *State {
 	if _, ok := s.fns[str.Simp(state)]; ok {
 		s.sNext = state
 	} else {
-		failFunc := onfail.Panic
+		var failFunc onfail.OnFail = onfail.Panic
 		if len(onFail) > 0 {
 			failFunc = onFail[0]
 		}
-		failFunc("Unregistered state: \"" + state + "\"")
+		failFunc.Fail("Unregistered state: \"" + state + "\"")
 	}
 	return s
 }
@@ -97,14 +97,22 @@ func (b registrationBuilder) Register(args ...interface{}) *registrationBuilder 
 }
 
 func (b registrationBuilder) reg(args ...interface{}) registrationBuilderArgs {
-	switch {
-	case len(args) == 1 && args[0].(type) == Callback:
-		return registrationBuilderArgs{args[0].(Callback), b.state}
-	case len(args) == 2 && args[0].(type) == string && args[1].(type) == Callback:
-		return registrationBuilderArgs{args[1].(Callback), args[0].(string)}
-	default:
-		panic("State: Bad arguments to builder method: must be (Callback) or (string, Callback)")
+	if len(args) == 1 || len(args) == 2 {
+		switch args[0].(type) {
+		case Callback:
+			if len(args) == 1 {
+				return registrationBuilderArgs{args[0].(Callback), b.state}
+			}
+		case string:
+			if len(args) == 2 {
+				switch args[1].(type) {
+				case Callback:
+					return registrationBuilderArgs{args[1].(Callback), args[0].(string)}
+				}
+			}
+		}
 	}
+	panic("State: Bad arguments to builder method: must be (Callback) or (string, Callback)")
 }
 
 type registrationBuilderArgs struct {
