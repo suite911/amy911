@@ -5,14 +5,14 @@ import (
 	"github.com/amyadzuki/amygolib/str"
 )
 
-type StateCallback func(*State)
+type Callback func(*State)
 
 type State struct {
 	Data interface{}
 
 	fnCloseRequested  func() bool
-	fnCurrent, fnNext StateCallback
-	fns               map[string]StateCallback
+	fnCurrent, fnNext Callback
+	fns               map[string]Callback
 	state             string
 }
 
@@ -25,17 +25,17 @@ func (s *State) Init(fn func() bool) *State {
 	return s
 }
 
-func (s *State) OnEnter(name string, cb StateCallback) registrationBuilder {
+func (s *State) OnEnter(name string, cb Callback) registrationBuilder {
 	s.fns[str.Simp(name) + "{"] = cb
 	return registrationBuilder{s, name}
 }
 
-func (s *State) OnLeave(name string, cb StateCallback) registrationBuilder {
+func (s *State) OnLeave(name string, cb Callback) registrationBuilder {
 	s.fns[str.Simp(name) + "}"] = cb
 	return registrationBuilder{s, name}
 }
 
-func (s *State) Register(name string, cb StateCallback) registrationBuilder {
+func (s *State) Register(name string, cb Callback) registrationBuilder {
 	s.fns[str.Simp(name)] = cb
 	return registrationBuilder{s, name}
 }
@@ -74,14 +74,14 @@ type registrationBuilder struct {
 	state string
 }
 
-func (b registrationBuilder) OnEnter(cb StateCallback) *registrationBuilder {
+func (b registrationBuilder) OnEnter(cb Callback) *registrationBuilder {
 	return b.s.OnEnter(b.state, cb)
 }
 
-func (b registrationBuilder) OnLeave(cb StateCallback) *registrationBuilder {
+func (b registrationBuilder) OnLeave(cb Callback) *registrationBuilder {
 	return b.s.OnLeave(b.state, cb)
 }
 
-func (b registrationBuilder) Register(cb StateCallback) *registrationBuilder {
+func (b registrationBuilder) Register(cb Callback) *registrationBuilder {
 	return b.s.Register(b.state, cb)
 }
