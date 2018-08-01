@@ -61,7 +61,7 @@ func (s *State) SetData(data interface{}) *State {
 }
 
 func (s *State) SetNext(state string, ...onFail onfail.OnFail) *State {
-	if fn, ok := s.fns[state], ok {
+	if fn, ok := s.fns[str.Simp(state)], ok {
 		s.state = state
 		s.fnNext = fn
 	} else {
