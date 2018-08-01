@@ -23,19 +23,19 @@ func (s *State) Init(fn func() bool) *State {
 	return s
 }
 
-func (s *State) OnEnter(name string, cb StateCallback) StateBuilder {
+func (s *State) OnEnter(name string, cb StateCallback) registrationBuilder {
 	s.fns[str.Simp(name) + "{"] = cb
-	return StateBuilder{s, name}
+	return registrationBuilder{s, name}
 }
 
-func (s *State) OnLeave(name string, cb StateCallback) StateBuilder {
+func (s *State) OnLeave(name string, cb StateCallback) registrationBuilder {
 	s.fns[str.Simp(name) + "}"] = cb
-	return StateBuilder{s, name}
+	return registrationBuilder{s, name}
 }
 
-func (s *State) Register(name string, cb StateCallback) StateBuilder {
+func (s *State) Register(name string, cb StateCallback) registrationBuilder {
 	s.fns[str.Simp(name)] = cb
-	return StateBuilder{s, name}
+	return registrationBuilder{s, name}
 }
 
 func (s *State) Run() {
@@ -67,19 +67,19 @@ func (s *State) SetNext(state string, ...onFail onfail.OnFail) *State {
 	return s
 }
 
-type StateBuilder struct {
+type registrationBuilder struct {
 	s     *State
 	state string
 }
 
-func (b StateBuilder) OnEnter(cb StateCallback) *StateBuilder {
+func (b registrationBuilder) OnEnter(cb StateCallback) *registrationBuilder {
 	return b.s.OnEnter(b.state, cb)
 }
 
-func (b StateBuilder) OnLeave(cb StateCallback) *StateBuilder {
+func (b registrationBuilder) OnLeave(cb StateCallback) *registrationBuilder {
 	return b.s.OnLeave(b.state, cb)
 }
 
-func (b StateBuilder) Register(cb StateCallback) *StateBuilder {
+func (b registrationBuilder) Register(cb StateCallback) *registrationBuilder {
 	return b.s.Register(b.state, cb)
 }
