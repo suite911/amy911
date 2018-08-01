@@ -8,6 +8,8 @@ import (
 type StateCallback func(*State)
 
 type State struct {
+	Data interface{}
+
 	fnCloseRequested  func() bool
 	fnCurrent, fnNext StateCallback
 	fns               map[string]StateCallback
