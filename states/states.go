@@ -60,8 +60,8 @@ func (s *State) SetData(data interface{}) *State {
 	return s
 }
 
-func (s *State) SetNext(state string, ...onFail onfail.OnFail) *State {
-	if fn, ok := s.fns[str.Simp(state)], ok {
+func (s *State) SetNext(state string, onFail ...onfail.OnFail) *State {
+	if fn, ok := s.fns[str.Simp(state)]; ok {
 		s.state = state
 		s.fnNext = fn
 	} else {
