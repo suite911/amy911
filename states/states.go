@@ -79,14 +79,33 @@ type registrationBuilder struct {
 	state string
 }
 
-func (b registrationBuilder) OnEnter(cb Callback) *registrationBuilder {
-	return b.s.OnEnter(b.state, cb)
+func (b registrationBuilder) OnEnter(args ...interface{}) *registrationBuilder {
+	a := b.reg(args...)
+	return b.s.OnEnter(a.state, a.cb)
 }
 
-func (b registrationBuilder) OnLeave(cb Callback) *registrationBuilder {
-	return b.s.OnLeave(b.state, cb)
+func (b registrationBuilder) OnLeave(args ...interface{}) *registrationBuilder {
+	a := b.reg(args...)
+	return b.s.OnLeave(a.state, a.cb)
 }
 
-func (b registrationBuilder) Register(cb Callback) *registrationBuilder {
-	return b.s.Register(b.state, cb)
+func (b registrationBuilder) Register(args ...interface{}) *registrationBuilder {
+	a := b.reg(args...)
+	return b.s.Register(a.state, a.cb)
+}
+
+func (b registrationBuilder) reg(args ...interface{}) registrationBuilderArgs {
+	switch {
+	case len(args) == 1 && args[0].(type) == Callback:
+		return registrationBuilderArgs{args[0].(Callback), b.state}
+	case len(args) == 2 && args[0].(type) == string && args[1].(type) == Callback:
+		return registrationBuilderArgs{args[1].(Callback), args[0].(string)}
+	default:
+		panic("State: Bad arguments to builder method: must be (Callback) or (string, Callback)")
+	}
+}
+
+type registrationBuilderArgs struct {
+	cb    Callback
+	state string
 }
