@@ -1,11 +1,15 @@
 package states
 
 import (
+	"errors"
+
 	"github.com/amyadzuki/amygolib/onfail"
 	"github.com/amyadzuki/amygolib/str"
 )
 
 type Callback func(*State)
+var ErrBuilderArgs =
+	errors.New("State: Bad arguments to builder method: must be (Callback) or (string, Callback)")
 
 type State struct {
 	Data interface{}
@@ -112,7 +116,7 @@ func (b registrationBuilder) reg(args ...interface{}) registrationBuilderArgs {
 			}
 		}
 	}
-	panic("State: Bad arguments to builder method: must be (Callback) or (string, Callback)")
+	panic(ErrBuilderArgs)
 }
 
 type registrationBuilderArgs struct {
