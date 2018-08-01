@@ -6,7 +6,7 @@ import (
 )
 
 type State struct {
-	fnCloseRequested  func(*State)
+	fnCloseRequested  func() bool
 	fnCurrent, fnNext func(*State)
 	fns               map[string]func(*State)
 	state             string
