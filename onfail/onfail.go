@@ -31,6 +31,13 @@ func InterfaceToError(err interface{}) error {
 // Called by the `Fail` helper function when the behavior is not configured at the call site
 var Default OnFail = Panic
 
+const LogDefaultFlags = log.Ldate | log.Ltime | log.Lmicroseconds | log.LUTC | log.Lshortfile
+var LogDefault = log.New(os.Stderr, "-FAIL-\t", LogDefaultFlags)
+var LogFatal *log.Logger = LogDefault
+var LogFatalTrace *log.Logger = LogDefault
+var LogPrint *log.Logger = LogDefault
+var LogPrintTrace *log.Logger = LogDefault
+
 // Interface for types which can configure fail behavior
 type OnFail interface {
 	Fail(error, interface{})
@@ -46,12 +53,12 @@ func (onFail OnFailCallFunction) Fail(err error, arg interface{}) {
 
 // Built-in fail behavior configuration to log fatally
 var Fatal OnFailCallFunction = func(err error, arg interface{}) {
-	log.Fatalln(err)
+	LogFatal.Fatalln(err)
 }
 
 // Built-in fail behavior configuration to log fatally; with stack trace
 var FatalTrace OnFailCallFunction = func(err error, arg interface{}) {
-	log.Fatalln(errors.WithStack(err))
+	LogFatalTrace.Fatalln(errors.WithStack(err))
 }
 
 // Built-in fail behavior configuration to ignore the error
@@ -70,12 +77,12 @@ var PanicTrace OnFailCallFunction = func(err error, arg interface{}) {
 
 // Built-in fail behavior configuration to log and continue
 var Print OnFailCallFunction = func(err error, arg interface{}) {
-	log.Println(err)
+	LogPrint.Println(err)
 }
 
 // Built-in fail behavior configuration to log and continue; with stack trace
 var PrintTrace OnFailCallFunction = func(err error, arg interface{}) {
-	log.Println(errors.WithStack(err))
+	LogPrintTrace.Println(errors.WithStack(err))
 }
 
 func fail(err error, arg interface{}, calleeConf OnFail, callerConf ...OnFail) {
