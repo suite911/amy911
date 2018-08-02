@@ -8,7 +8,6 @@ import (
 	"github.com/amyadzuki/amygolib/str"
 )
 
-type Callback func(*State)
 var ErrTooManyNames =
 	errors.New("State: Bad arguments to Run: must be () or (string)")
 
@@ -16,7 +15,7 @@ type State struct {
 	Data interface{}
 
 	fnCloseRequested func() bool
-	fns              map[string]Callback
+	fns              map[string]func(*State)
 	editing          string
 	sCurrent, sNext  string
 	state            string
@@ -86,19 +85,19 @@ func (s *State) SetNext(state string, onFail ...onfail.OnFail) *State {
 	return s
 }
 
-func (s *State) reg(args ...interface{}) Callback {
+func (s *State) reg(args ...interface{}) func(*State) {
 	if len(args) == 1 || len(args) == 2 {
 		switch args[0].(type) {
-		case Callback:
+		case func(*State):
 			if len(args) == 1 {
-				return args[0].(Callback)
+				return args[0].(func(*State))
 			}
 		case string:
 			if len(args) == 2 {
 				switch args[1].(type) {
-				case Callback:
+				case func(*State):
 					s.editing = args[0].(string)
-					return args[1].(Callback)
+					return args[1].(func(*State))
 				}
 			}
 		}
@@ -107,7 +106,7 @@ func (s *State) reg(args ...interface{}) Callback {
 }
 
 func badBuilderArgs(args ...interface{}) error {
-	msg := "State: Bad arguments to builder method: must be (Callback) or (string, Callback)\nHave: ("
+	msg := "State: Bad arguments to builder method: must be (func(*State)) or (string, func(*State))\nHave: ("
 	for aid, arg := range args {
 		if aid != 0 {
 			msg += ", "
