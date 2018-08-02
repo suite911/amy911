@@ -28,6 +28,30 @@ func InterfaceToError(err interface{}) error {
 	}
 }
 
+// An internal function; exported in case it is needed in user code
+func LogFatalln(err error, one, two *log.Logger) {
+	switch {
+	case one != nil:
+		one.Fatalln(err)
+	case two != nil:
+		two.Fatalln(err)
+	default:
+		log.Fatalln()
+	}
+}
+
+// An internal function; exported in case it is needed in user code
+func LogPrintln(err error, one, two *log.Logger) {
+	switch {
+	case one != nil:
+		one.Println(err)
+	case two != nil:
+		two.Println(err)
+	default:
+		log.Println()
+	}
+}
+
 // Called by the `Fail` helper function when the behavior is not configured at the call site
 var Default OnFail = Panic
 
@@ -54,12 +78,12 @@ func (onFail OnFailCallFunction) Fail(err error, arg interface{}) {
 
 // Built-in fail behavior configuration to log fatally
 var Fatal OnFailCallFunction = func(err error, arg interface{}) {
-	logFatalln(err, LogFatal, nil)
+	LogFatalln(err, LogFatal, nil)
 }
 
 // Built-in fail behavior configuration to log fatally; with stack trace
 var FatalTrace OnFailCallFunction = func(err error, arg interface{}) {
-	logFatalln(errors.WithStack(err), LogFatalTrace, LogFatal)
+	LogFatalln(errors.WithStack(err), LogFatalTrace, LogFatal)
 }
 
 // Built-in fail behavior configuration to ignore the error
@@ -78,12 +102,12 @@ var PanicTrace OnFailCallFunction = func(err error, arg interface{}) {
 
 // Built-in fail behavior configuration to log and continue
 var Print OnFailCallFunction = func(err error, arg interface{}) {
-	logPrintln(err, LogPrint, nil)
+	LogPrintln(err, LogPrint, nil)
 }
 
 // Built-in fail behavior configuration to log and continue; with stack trace
 var PrintTrace OnFailCallFunction = func(err error, arg interface{}) {
-	logPrintln(errors.WithStack(err), LogPrintTrace, LogPrint)
+	LogPrintln(errors.WithStack(err), LogPrintTrace, LogPrint)
 }
 
 func fail(err error, arg interface{}, calleeConf OnFail, callerConf ...OnFail) {
@@ -98,27 +122,5 @@ func fail(err error, arg interface{}, calleeConf OnFail, callerConf ...OnFail) {
 		Panic.Fail(err, arg)
 	default:
 		panic(err)
-	}
-}
-
-func logFatalln(err error, one, two *log.Logger) {
-	switch {
-	case one != nil:
-		one.Fatalln(err)
-	case two != nil:
-		two.Fatalln(err)
-	default:
-		log.Fatalln()
-	}
-}
-
-func logPrintln(err error, one, two *log.Logger) {
-	switch {
-	case one != nil:
-		one.Println(err)
-	case two != nil:
-		two.Println(err)
-	default:
-		log.Println()
 	}
 }
