@@ -8,23 +8,29 @@ import (
 )
 
 type Logs struct {
-	Minor *log.Logger // Minor trace point
-	Major *log.Logger // Major trace point
-	Debug *log.Logger
-	Info  *log.Logger
-	Warn  *log.Logger
-	Error *log.Logger
-	Fatal *log.Logger
+	LoggerMinor *log.Logger // Minor trace point
+	LoggerMajor *log.Logger // Major trace point
+	LoggerDebug *log.Logger // Debug info
+	LoggerInfo  *log.Logger // Info
+	LoggerWarn  *log.Logger // Warning
+	LoggerError *log.Logger // Error
+	LoggerFatal *log.Logger // Fatal error
 }
 
 func New(path string, info, debug, trace bool) (logs *Logs, err error) {
-	logFile, TODO := os.OpenFile(path, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0666)
-	err = TODO
-	if err != nil {
-		return
-	}
-
 	logs = new(Logs)
+	err = logs.Init(path, info, debug, trace)
+	return
+}
+
+func (logs *Logs) Init(path string, info, debug, trace bool) error {
+	if logs == nil {
+		panic("logs was nil")
+	}
+	logFile, err := os.OpenFile(path, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0666)
+	if err != nil {
+		return err
+	}
 
 	var wTrace, wDebug, wInfo, wWarn, wError, wFatal io.Writer
 
@@ -50,12 +56,54 @@ func New(path string, info, debug, trace bool) (logs *Logs, err error) {
 	const infoFlags = log.Ldate | log.Ltime | log.Lmicroseconds | log.LUTC
 	const logsFlags = log.Ldate | log.Ltime | log.Lmicroseconds | log.LUTC | log.Lshortfile
 
-	logs.Minor = log.New(wTrace, "-t-\t", logsFlags)
-	logs.Major = log.New(wTrace, "-tr-\t", logsFlags)
-	logs.Debug = log.New(wDebug, "-dbg-\t", logsFlags)
-	logs.Info = log.New(wInfo, "-info-\t", infoFlags)
-	logs.Warn = log.New(wWarn, "-WARN-\t", logsFlags)
-	logs.Error = log.New(wError, "-ERROR-\t", logsFlags)
-	logs.Fatal = log.New(wFatal, "-FATAL-\t", logsFlags)
-	return
+	logs.LoggerMinor = log.New(wTrace, "-t-\t", logsFlags)
+	logs.LoggerMajor = log.New(wTrace, "-tr-\t", logsFlags)
+	logs.LoggerDebug = log.New(wDebug, "-dbg-\t", logsFlags)
+	logs.LoggerInfo = log.New(wInfo, "-info-\t", infoFlags)
+	logs.LoggerWarn = log.New(wWarn, "-WARN-\t", logsFlags)
+	logs.LoggerError = log.New(wError, "-ERROR-\t", logsFlags)
+	logs.LoggerFatal = log.New(wFatal, "-FATAL-\t", logsFlags)
+	return nil
+}
+
+func (logs *Logs) Minor(v ...interface{}) {
+	if logs != nil && logs.LoggerMinor != nil {
+		logs.LoggerMinor.Println(v...)
+	}
+}
+
+func (logs *Logs) Major(v ...interface{}) {
+	if logs != nil && logs.LoggerMajor != nil {
+		logs.LoggerMajor.Println(v...)
+	}
+}
+
+func (logs *Logs) Debug(v ...interface{}) {
+	if logs != nil && logs.LoggerDebug != nil {
+		logs.LoggerDebug.Println(v...)
+	}
+}
+
+func (logs *Logs) Info(v ...interface{}) {
+	if logs != nil && logs.LoggerInfo != nil {
+		logs.LoggerInfo.Println(v...)
+	}
+}
+
+func (logs *Logs) Warn(v ...interface{}) {
+	if logs != nil && logs.LoggerWarn != nil {
+		logs.LoggerWarn.Println(v...)
+	}
+}
+
+func (logs *Logs) Error(v ...interface{}) {
+	if logs != nil && logs.LoggerError != nil {
+		logs.LoggerError.Println(v...)
+	}
+}
+
+func (logs *Logs) Fatal(v ...interface{}) {
+	if logs != nil && logs.LoggerFatal != nil {
+		logs.LoggerFatal.Fatalln(v...)
+	}
 }
