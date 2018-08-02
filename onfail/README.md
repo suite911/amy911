@@ -15,11 +15,16 @@ import (
 	"github.com/amyadzuki/amystuff/onfail"
 )
 
-func gowrong(onFail onfail.OnFail) {
-	onFail.Fail(errors.New("Oh noes, something went wrong! >~<"))
+func gowrong(onFail ...onfail.OnFail) {
+	onfail.Fail("Oh noes, something went wrong! >~<", nil, onfail.Fatal, onFail...)
 }
 
 func main() {
-	gowrong(onfail.Panic)
+	defer func() {
+		if r := recover(); r != nil {
+			gowrong() // log.Fatalln(err)
+		}
+	}
+	gowrong(onfail.Panic) // panic(err)
 }
 ```
