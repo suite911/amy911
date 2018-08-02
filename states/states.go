@@ -10,7 +10,7 @@ import (
 	"github.com/amyadzuki/amygolib/str"
 )
 
-var Debug, Note, Trace *log.Logger = nil, nil
+var Debug, Note, Trace *log.Logger = nil, nil, nil
 
 var ErrTooManyNames =
 	errors.New("State: Bad arguments to Run/RunOnce: must be () or (string)")
