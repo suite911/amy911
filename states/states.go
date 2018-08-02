@@ -50,7 +50,7 @@ func (s *State) Run(name ...string) *State {
 	switch len(name) {
 	case 0:
 	case 1:
-		s.sNext = name[0]
+		s.sNext = str.Simp(name[0])
 	default:
 		panic(ErrTooManyNames)
 	}
@@ -97,7 +97,7 @@ func (s *State) reg(args ...interface{}) func(*State) {
 			if len(args) == 2 {
 				switch args[1].(type) {
 				case func(*State):
-					s.editing = args[0].(string)
+					s.editing = str.Simp(args[0].(string))
 					return args[1].(func(*State))
 				}
 			}
