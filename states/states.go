@@ -9,7 +9,7 @@ import (
 )
 
 var ErrTooManyNames =
-	errors.New("State: Bad arguments to Run: must be () or (string)")
+	errors.New("State: Bad arguments to Run/RunOnce: must be () or (string)")
 
 type State struct {
 	Data interface{}
@@ -54,22 +54,22 @@ func (s *State) Run(name ...string) *State {
 	default:
 		panic(ErrTooManyNames)
 	}
-	s.sCurrent = s.sNext
-	main, mok := s.fns[s.state]
-	if mok {
-		enter, eok := s.fns[s.state + "{"]
-		leave, lok := s.fns[s.state + "}"]
-		if eok {
-			enter(s)
-		}
-		for !s.fnCloseRequested() && s.sNext == s.sCurrent {
-			main(s)
-		}
-		if lok {
-			leave(s)
-		}
+	for !s.fnCloseRequested() && len(s.sNext) > 0 {
+		s.runOnce()
 	}
-	return s
+}
+
+func (s *State) RunOnce(name ...string) *State {
+	switch len(name) {
+	case 0:
+	case 1:
+		s.sNext = str.Simp(name[0])
+	default:
+		panic(ErrTooManyNames)
+	}
+	if !s.fnCloseRequested() && len(s.sNext) > 0 {
+		return s.runOnce()
+	}
 }
 
 func (s *State) SetData(data interface{}) *State {
@@ -102,6 +102,25 @@ func (s *State) reg(args ...interface{}) func(*State) {
 		}
 	}
 	panic(badBuilderArgs(args...))
+}
+
+func (s *State) runOnce() *State {
+	s.sCurrent = s.sNext
+	main, mok := s.fns[s.state]
+	if mok {
+		enter, eok := s.fns[s.state + "{"]
+		leave, lok := s.fns[s.state + "}"]
+		if eok {
+			enter(s)
+		}
+		for !s.fnCloseRequested() && s.sNext == s.sCurrent {
+			main(s)
+		}
+		if lok {
+			leave(s)
+		}
+	}
+	return s
 }
 
 func badBuilderArgs(args ...interface{}) error {
