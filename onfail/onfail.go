@@ -2,24 +2,45 @@ package onfail
 
 import "log"
 
+// Helper function for configurable fail behavior
+func Fail (err error, arg interface{}, onFail ...OnFail) {
+	switch {
+	case len(onFail) >= 1:
+		onFail[0].Fail(err, arg)
+	case Default != nil:
+		Default.Fail(err, arg)
+	default:
+		Panic.Fail(err, arg)
+	}
+}
+
+// Called by the `Fail` helper function when the behavior is not configured at the call site
+var Default OnFail = Panic
+
+// Interface for types which can configure fail behavior
 type OnFail interface {
-	Fail(error)
+	Fail(error, interface{})
 }
 
-type OnFailCallFunction func(error)
+// Function type for configure fail behavior by calling the function
+type OnFailCallFunction func(error, interface{})
 
-func (onFail OnFailCallFunction) Fail(err error) {
-	onFail(err)
+// To satisfy the `OnFail` interface
+func (onFail OnFailCallFunction) Fail(err error, arg interface{}) {
+	onFail(err, arg)
 }
 
-var Fatal OnFailCallFunction = func(err error) {
+// Built-in fail behavior configuration to log fatally
+var Fatal OnFailCallFunction = func(err error, arg interface{}) {
 	log.Fatalln(err)
 }
 
-var Panic OnFailCallFunction = func(err error) {
+// Built-in fail behavior configuration to panic
+var Panic OnFailCallFunction = func(err error, arg interface{}) {
 	panic(err)
 }
 
-var Print OnFailCallFunction = func(err error) {
+// Built-in fail behavior configuration to log and continue
+var Print OnFailCallFunction = func(err error, arg interface{}) {
 	log.Println(err)
 }
