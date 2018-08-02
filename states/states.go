@@ -57,6 +57,7 @@ func (s *State) Run(name ...string) *State {
 	for !s.fnCloseRequested() && len(s.sNext) > 0 {
 		s.runOnce()
 	}
+	return s
 }
 
 func (s *State) RunOnce(name ...string) *State {
@@ -68,8 +69,9 @@ func (s *State) RunOnce(name ...string) *State {
 		panic(ErrTooManyNames)
 	}
 	if !s.fnCloseRequested() && len(s.sNext) > 0 {
-		return s.runOnce()
+		s.runOnce()
 	}
+	return s
 }
 
 func (s *State) SetData(data interface{}) *State {
@@ -104,7 +106,7 @@ func (s *State) reg(args ...interface{}) func(*State) {
 	panic(badBuilderArgs(args...))
 }
 
-func (s *State) runOnce() *State {
+func (s *State) runOnce() {
 	s.sCurrent = s.sNext
 	main, mok := s.fns[s.state]
 	if mok {
@@ -120,7 +122,6 @@ func (s *State) runOnce() *State {
 			leave(s)
 		}
 	}
-	return s
 }
 
 func badBuilderArgs(args ...interface{}) error {
