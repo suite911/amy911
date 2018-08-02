@@ -41,17 +41,20 @@ func (s *State) Init(fn func() bool) *State {
 }
 
 func (s *State) OnEnter(args ...interface{}) *State {
-	s.fns[s.editing + "{"] = s.reg(args...)
+	cb := s.reg(args...)
+	s.fns[s.editing + "{"] = cb
 	return s
 }
 
 func (s *State) OnLeave(args ...interface{}) *State {
-	s.fns[s.editing + "}"] = s.reg(args...)
+	cb := s.reg(args...)
+	s.fns[s.editing + "}"] = cb
 	return s
 }
 
 func (s *State) Register(args ...interface{}) *State {
-	s.fns[s.editing] = s.reg(args...)
+	cb := s.reg(args...)
+	s.fns[s.editing] = cb
 	return s
 }
 
