@@ -27,6 +27,7 @@ func New(fn func() bool) *State {
 
 func (s *State) Init(fn func() bool) *State {
 	s.fnCloseRequested = fn
+	s.fns = make(map[string]func(*State))
 	return s
 }
 
