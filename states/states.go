@@ -22,6 +22,8 @@ type State struct {
 
 	fnCloseRequested func() bool
 	fns              map[string]func(*State)
+	onFail           onfail.OnFail
+
 	editing          string
 	sCurrent, sNext  string
 	state            string
@@ -49,6 +51,10 @@ func (s *State) OnEnter(args ...interface{}) *State {
 	return s
 }
 
+func (s *State) OnFail(onFail onfail.OnFail) *State {
+	s.onFail = onFail
+}
+
 func (s *State) OnFrame(args ...interface{}) *State {
 	cb := s.reg(args...)
 	if Debug != nil {
@@ -67,30 +73,16 @@ func (s *State) OnLeave(args ...interface{}) *State {
 	return s
 }
 
-func (s *State) Run(name ...string) *State {
-	switch len(name) {
-	case 0:
-	case 1:
-		s.sNext = str.Simp(name[0])
-	default:
-		panic(ErrTooManyNames)
-	}
+func (s *State) Run(onFail ...onfail.OnFail) *State {
 	for !s.fnCloseRequested() && len(s.sNext) > 0 {
-		s.runOnce()
+		s.runOnce(onFail...)
 	}
 	return s
 }
 
-func (s *State) RunOnce(name ...string) *State {
-	switch len(name) {
-	case 0:
-	case 1:
-		s.sNext = str.Simp(name[0])
-	default:
-		panic(ErrTooManyNames)
-	}
+func (s *State) RunOnce(onFail ...onfail.OnFail) *State {
 	if !s.fnCloseRequested() && len(s.sNext) > 0 {
-		s.runOnce()
+		s.runOnce(onFail...)
 	}
 	return s
 }
@@ -110,7 +102,7 @@ func (s *State) SetNext(state string, onFail ...onfail.OnFail) *State {
 	if _, ok := s.fns[str.Simp(state)]; ok {
 		s.sNext = state
 	} else {
-		onfail.Fail("Unregistered state: \"" + state + "\"", s, nil, onFail...)
+		onfail.Fail("Cannot advance to unregistered state: \"" + state + "\"", s, nil, onFail...)
 	}
 	return s
 }
@@ -146,7 +138,7 @@ func (s *State) reg(args ...interface{}) func(*State) {
 	panic(badBuilderArgs(args...))
 }
 
-func (s *State) runOnce() {
+func (s *State) runOnce(onFail ...onfail.OnFail) {
 	s.sCurrent = s.sNext
 	if Trace != nil {
 		Trace.Println("Entering state: \"" + s.sCurrent + "\"")
@@ -164,6 +156,8 @@ func (s *State) runOnce() {
 		if lok {
 			leave(s)
 		}
+	} else {
+		onfail.Fail("Cannot run unregistered state: \"" + s.state + "\"", s, s.onFail, onFail...)
 	}
 	s.Sleep()
 }
