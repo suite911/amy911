@@ -56,6 +56,10 @@ var Fatal OnFailCallFunction = func(err error, arg interface{}) {
 	log.Fatalln(err)
 }
 
+// Built-in fail behavior configuration to ignore the error
+var Ignore OnFailCallFunction = func(err error, arg interface{}) {
+}
+
 // Built-in fail behavior configuration to panic
 var Panic OnFailCallFunction = func(err error, arg interface{}) {
 	panic(err)
