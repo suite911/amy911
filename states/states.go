@@ -71,11 +71,7 @@ func (s *State) SetNext(state string, onFail ...onfail.OnFail) *State {
 	if _, ok := s.fns[str.Simp(state)]; ok {
 		s.sNext = state
 	} else {
-		var failFunc onfail.OnFail = onfail.Panic
-		if len(onFail) > 0 {
-			failFunc = onFail[0]
-		}
-		failFunc.Fail(errors.New("Unregistered state: \"" + state + "\""))
+		onfail.Fail(errors.New("Unregistered state: \"" + state + "\""), s, onFail...)
 	}
 	return s
 }
