@@ -19,9 +19,11 @@ func gowrong(onFail ...onfail.OnFail) {
 func main() {
 	defer func() {
 		if r := recover(); r != nil {
-			gowrong() // log.Fatalln(err)
+			gowrong() // logs the error fatally
 		}
 	}
-	gowrong(onfail.Panic) // panic(err)
+	gowrong(onfail.Ignore) // ignores the error
+	gowrong(onfail.PrintTrace) // logs the error, along with a stack trace
+	gowrong(onfail.Panic) // panics the error
 }
 ```
