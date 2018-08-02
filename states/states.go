@@ -71,7 +71,7 @@ func (s *State) SetNext(state string, onFail ...onfail.OnFail) *State {
 	if _, ok := s.fns[str.Simp(state)]; ok {
 		s.sNext = state
 	} else {
-		onfail.Fail(errors.New("Unregistered state: \"" + state + "\""), s, nil, onFail...)
+		onfail.Fail("Unregistered state: \"" + state + "\"", s, nil, onFail...)
 	}
 	return s
 }
