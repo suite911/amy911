@@ -16,7 +16,6 @@ var MinimumSleepDuration = time.Millisecond
 
 type State struct {
 	Data interface{}
-	Dpf  float64
 
 	fnCloseRequested func() bool
 	fns              map[string]func(*State)
@@ -24,6 +23,7 @@ type State struct {
 	sCurrent, sNext  string
 	state            string
 	timestamp        time.Time
+	timetosleep      time.Duration
 }
 
 func New(fn func() bool) *State {
@@ -85,9 +85,9 @@ func (s *State) SetData(data interface{}) *State {
 	return s
 }
 
-func (s *State) SetFps(float64 fps) *State {
-	dpf := float64(time.Second) / fps
-	s.Dpf = time.Duration(dpf)
+func (s *State) SetFps(fps float64) *State {
+	timetosleep := float64(time.Second) / fps
+	s.timetosleep = time.Duration(timetosleep)
 	return s
 }
 
@@ -105,7 +105,7 @@ func (s *State) Sleep() *State {
 	timestamp := s.timestamp
 	s.timestamp = now
 	elapsed := now.Sub(timestamp)
-	remaining := elapsed - s.Dpf
+	remaining := elapsed - s.timetosleep
 	if remaining < MinimumSleepDuration {
 		remaining = MinimumSleepDuration
 	}
