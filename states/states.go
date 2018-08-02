@@ -10,7 +10,7 @@ import (
 	"github.com/amyadzuki/amygolib/str"
 )
 
-var Debug, Note *log.Logger = nil, nil
+var Debug, Note, Trace *log.Logger = nil, nil
 
 var ErrTooManyNames =
 	errors.New("State: Bad arguments to Run/RunOnce: must be () or (string)")
@@ -27,7 +27,8 @@ type State struct {
 	editing     string
 	next        string
 	timestamp   time.Time
-	timetosleep time.Duration
+
+	framedur time.Duration
 }
 
 func New(fn func() bool) *State {
@@ -93,8 +94,8 @@ func (s *State) SetData(data interface{}) *State {
 }
 
 func (s *State) SetFps(fps float64) *State {
-	timetosleep := float64(time.Second) / fps
-	s.timetosleep = time.Duration(timetosleep)
+	framedur := float64(time.Second) / fps
+	s.framedur = time.Duration(framedur)
 	return s
 }
 
@@ -113,9 +114,12 @@ func (s *State) Sleep() *State {
 	timestamp := s.timestamp
 	s.timestamp = now
 	elapsed := now.Sub(timestamp)
-	remaining := elapsed - s.timetosleep
+	remaining := s.framedur - elapsed
 	if remaining < MinimumSleepDuration {
 		remaining = MinimumSleepDuration
+	}
+	if Trace != nil {
+		Trace.Printf("Will sleep for %s", remaining)
 	}
 	time.Sleep(remaining)
 	return s
