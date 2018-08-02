@@ -3,11 +3,14 @@ package states
 import (
 	"errors"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/amyadzuki/amygolib/onfail"
 	"github.com/amyadzuki/amygolib/str"
 )
+
+var Trace *log.Logger = nil
 
 var ErrTooManyNames =
 	errors.New("State: Bad arguments to Run/RunOnce: must be () or (string)")
@@ -133,6 +136,9 @@ func (s *State) reg(args ...interface{}) func(*State) {
 
 func (s *State) runOnce() {
 	s.sCurrent = s.sNext
+	if Trace != nil {
+		Trace.Println("Entering state: \"" + s.sCurrent + "\"")
+	}
 	main, mok := s.fns[s.state]
 	if mok {
 		enter, eok := s.fns[s.state + "{"]
