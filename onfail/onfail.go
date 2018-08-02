@@ -1,18 +1,37 @@
 package onfail
 
-import "log"
+import (
+	"log"
+
+	"github.com/pkg/errors"
+)
 
 // Helper function for configurable fail behavior
-func Fail (err error, arg interface{}, callee OnFail, caller ...OnFail) {
+func Fail (err, arg interface{}, calleeConf OnFail, callerConf ...OnFail) {
+	e := InterfaceToError(err)
 	switch {
-	case len(caller) >= 1:
-		caller[0].Fail(err, arg)
-	case callee != nil:
-		callee.Fail(err, arg)
-	case Default != nil:
-		Default.Fail(err, arg)
+	case len(callerConf) >= 1:
+		callerConf[0].Fail(e, arg)
+	case calleeConf != nil:
+		calleeConf.Fail(e, arg)
+	case Default != nil: // but you should never set Default to nil
+		Default.Fail(e, arg)
+	case Panic != nil: // but you should never set Panic to nil
+		Panic.Fail(e, arg)
 	default:
-		Panic.Fail(err, arg)
+		panic(e)
+	}
+}
+
+// An internal function; exported in case it is needed in user code
+func InterfaceToError(err interface{}) error {
+	switch err.(type) {
+	case error:
+		return err.(error)
+	case string:
+		return errors.New(err.(string))
+	default:
+		panic("`err` must be either `error` or `string`!")
 	}
 }
 
