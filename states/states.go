@@ -10,7 +10,7 @@ import (
 	"github.com/amyadzuki/amygolib/str"
 )
 
-var Debug, Trace *log.Logger = nil, nil
+var Debug, Note *log.Logger = nil, nil
 
 var ErrTooManyNames =
 	errors.New("State: Bad arguments to Run/RunOnce: must be () or (string)")
@@ -141,8 +141,8 @@ func (s *State) reg(args ...interface{}) func(*State) {
 
 func (s *State) runOnce(onFail ...onfail.OnFail) {
 	state := s.next
-	if Trace != nil {
-		Trace.Println("Entering state: \"" + state + "\"")
+	if Note != nil {
+		Note.Println("Entering state: \"" + state + "\"")
 	}
 	main, mok := s.fns[state]
 	if mok {
