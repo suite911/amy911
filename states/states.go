@@ -87,20 +87,18 @@ func (s *State) SetNext(state string, onFail ...onfail.OnFail) *State {
 }
 
 func (s *State) reg(args ...interface{}) func(*State) {
-	if len(args) == 1 || len(args) == 2 {
-		switch args[0].(type) {
-		case func(*State):
-			if len(args) == 1 {
-				return args[0].(func(*State))
-			}
-		case string:
-			if len(args) == 2 {
-				switch args[1].(type) {
-				case func(*State):
-					s.editing = str.Simp(args[0].(string))
-					return args[1].(func(*State))
-				}
-			}
+	switch len(args) {
+	case 1:
+		cb, ok := args[0].(func(*State))
+		if ok {
+			return cb
+		}
+	case 2:
+		name, nok := args[0].(string)
+		cb, cok := args[1].(func(*State))
+		if nok && cok {
+			s.editing = str.Simp(name)
+			return cb
 		}
 	}
 	panic(badBuilderArgs(args...))
