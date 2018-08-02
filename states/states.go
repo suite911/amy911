@@ -110,6 +110,7 @@ func (s *State) Sleep() *State {
 		remaining = MinimumSleepDuration
 	}
 	time.Sleep(remaining)
+	return s
 }
 
 func (s *State) reg(args ...interface{}) func(*State) {
