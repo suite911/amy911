@@ -47,7 +47,7 @@ func (s *State) Register(args ...interface{}) *State {
 	return s
 }
 
-func (s *State) Run(name ...string) {
+func (s *State) Run(name ...string) *State {
 	switch len(name) {
 	case 0:
 	case 1:
@@ -70,6 +70,7 @@ func (s *State) Run(name ...string) {
 			leave(s)
 		}
 	}
+	return s
 }
 
 func (s *State) SetData(data interface{}) *State {
