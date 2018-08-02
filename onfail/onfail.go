@@ -56,6 +56,11 @@ var Fatal OnFailCallFunction = func(err error, arg interface{}) {
 	log.Fatalln(err)
 }
 
+// Built-in fail behavior configuration to log fatally; with stack trace
+var FatalTrace OnFailCallFunction = func(err error, arg interface{}) {
+	log.Fatalln(errors.WithStack(err))
+}
+
 // Built-in fail behavior configuration to ignore the error
 var Ignore OnFailCallFunction = func(err error, arg interface{}) {
 }
@@ -65,7 +70,17 @@ var Panic OnFailCallFunction = func(err error, arg interface{}) {
 	panic(err)
 }
 
+// Built-in fail behavior configuration to panic; with stack trace
+var PanicTrace OnFailCallFunction = func(err error, arg interface{}) {
+	panic(errors.WithStack(err))
+}
+
 // Built-in fail behavior configuration to log and continue
 var Print OnFailCallFunction = func(err error, arg interface{}) {
 	log.Println(err)
+}
+
+// Built-in fail behavior configuration to log and continue; with stack trace
+var PrintTrace OnFailCallFunction = func(err error, arg interface{}) {
+	log.Println(errors.WithStack(err))
 }
