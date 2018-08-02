@@ -99,7 +99,7 @@ func (s *State) SetFps(fps float64) *State {
 }
 
 func (s *State) SetNext(state string, onFail ...onfail.OnFail) *State {
-	state := str.Simp(state)
+	state = str.Simp(state)
 	if _, ok := s.fns[state]; ok {
 		s.next = state
 	} else {
