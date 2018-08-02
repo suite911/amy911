@@ -24,11 +24,10 @@ type State struct {
 	fns              map[string]func(*State)
 	onFail           onfail.OnFail
 
-	editing          string
-	sCurrent, sNext  string
-	state            string
-	timestamp        time.Time
-	timetosleep      time.Duration
+	editing     string
+	next        string
+	timestamp   time.Time
+	timetosleep time.Duration
 }
 
 func New(fn func() bool) *State {
@@ -75,14 +74,14 @@ func (s *State) OnLeave(args ...interface{}) *State {
 }
 
 func (s *State) Run(onFail ...onfail.OnFail) *State {
-	for !s.fnCloseRequested() && len(s.sNext) > 0 {
+	for !s.fnCloseRequested() && len(s.next) > 0 {
 		s.runOnce(onFail...)
 	}
 	return s
 }
 
 func (s *State) RunOnce(onFail ...onfail.OnFail) *State {
-	if !s.fnCloseRequested() && len(s.sNext) > 0 {
+	if !s.fnCloseRequested() && len(s.next) > 0 {
 		s.runOnce(onFail...)
 	}
 	return s
@@ -101,7 +100,7 @@ func (s *State) SetFps(fps float64) *State {
 
 func (s *State) SetNext(state string, onFail ...onfail.OnFail) *State {
 	if _, ok := s.fns[str.Simp(state)]; ok {
-		s.sNext = state
+		s.next = state
 	} else {
 		onfail.Fail("Cannot advance to unregistered state: \"" + state + "\"", s, nil, onFail...)
 	}
@@ -140,25 +139,25 @@ func (s *State) reg(args ...interface{}) func(*State) {
 }
 
 func (s *State) runOnce(onFail ...onfail.OnFail) {
-	s.sCurrent = s.sNext
+	state := s.next
 	if Trace != nil {
-		Trace.Println("Entering state: \"" + s.sCurrent + "\"")
+		Trace.Println("Entering state: \"" + state + "\"")
 	}
-	main, mok := s.fns[s.state]
+	main, mok := s.fns[state]
 	if mok {
-		enter, eok := s.fns[s.state + "{"]
-		leave, lok := s.fns[s.state + "}"]
+		enter, eok := s.fns[state + "{"]
+		leave, lok := s.fns[state + "}"]
 		if eok {
 			enter(s)
 		}
-		for !s.fnCloseRequested() && s.sNext == s.sCurrent {
+		for !s.fnCloseRequested() && s.next == state {
 			main(s)
 		}
 		if lok {
 			leave(s)
 		}
 	} else {
-		onfail.Fail("Cannot run unregistered state: \"" + s.state + "\"", s, s.onFail, onFail...)
+		onfail.Fail("Cannot run unregistered state: \"" + state + "\"", s, s.onFail, onFail...)
 	}
 	s.Sleep()
 }
