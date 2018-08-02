@@ -8,8 +8,6 @@ import (
 )
 
 type Callback func(*State)
-var ErrBuilderArgs =
-	errors.New("State: Bad arguments to builder method: must be (Callback) or (string, Callback)")
 var ErrTooManyNames =
 	errors.New("State: Bad arguments to Run: must be () or (string)")
 
@@ -104,5 +102,17 @@ func (s *State) reg(args ...interface{}) Callback {
 			}
 		}
 	}
-	panic(ErrBuilderArgs)
+	panic(badBuilderArgs(args...))
+}
+
+func badBuilderArgs(args ...interface{}) error {
+	msg := "State: Bad arguments to builder method: must be (Callback) or (string, Callback)\nHave: ("
+	for aid, arg := range args {
+		if aid != 0 {
+			msg += ", "
+		}
+		msg += fmt.Sprintf("%T", arg)
+	}
+	msg += ")"
+	return errors.New(msg)
 }
