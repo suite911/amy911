@@ -10,12 +10,15 @@ import (
 type Callback func(*State)
 var ErrBuilderArgs =
 	errors.New("State: Bad arguments to builder method: must be (Callback) or (string, Callback)")
+var ErrTooManyNames =
+	errors.New("State: Bad arguments to Run: must be () or (string)")
 
 type State struct {
 	Data interface{}
 
 	fnCloseRequested func() bool
 	fns              map[string]Callback
+	editing          string
 	sCurrent, sNext  string
 	state            string
 }
@@ -29,22 +32,29 @@ func (s *State) Init(fn func() bool) *State {
 	return s
 }
 
-func (s *State) OnEnter(name string, cb Callback) registrationBuilder {
-	s.fns[str.Simp(name) + "{"] = cb
-	return registrationBuilder{s, name}
+func (s *State) OnEnter(args ...interface{}) *State {
+	s.fns[s.editing + "{"] = s.reg(args...)
+	return s
 }
 
-func (s *State) OnLeave(name string, cb Callback) registrationBuilder {
-	s.fns[str.Simp(name) + "}"] = cb
-	return registrationBuilder{s, name}
+func (s *State) OnLeave(args ...interface{}) *State {
+	s.fns[s.editing + "}"] = s.reg(args...)
+	return s
 }
 
-func (s *State) Register(name string, cb Callback) registrationBuilder {
-	s.fns[str.Simp(name)] = cb
-	return registrationBuilder{s, name}
+func (s *State) Register(args ...interface{}) *State {
+	s.fns[s.editing] = s.reg(args...)
+	return s
 }
 
-func (s *State) Run() {
+func (s *State) Run(name ...string) {
+	switch len(name) {
+	case 0:
+	case 1:
+		s.sNext = name[0]
+	default:
+		panic(ErrTooManyNames)
+	}
 	s.sCurrent = s.sNext
 	main, mok := s.fns[s.state]
 	if mok {
@@ -76,46 +86,22 @@ func (s *State) SetNext(state string, onFail ...onfail.OnFail) *State {
 	return s
 }
 
-type registrationBuilder struct {
-	s     *State
-	state string
-}
-
-func (b registrationBuilder) OnEnter(args ...interface{}) registrationBuilder {
-	a := b.reg(args...)
-	return b.s.OnEnter(a.state, a.cb)
-}
-
-func (b registrationBuilder) OnLeave(args ...interface{}) registrationBuilder {
-	a := b.reg(args...)
-	return b.s.OnLeave(a.state, a.cb)
-}
-
-func (b registrationBuilder) Register(args ...interface{}) registrationBuilder {
-	a := b.reg(args...)
-	return b.s.Register(a.state, a.cb)
-}
-
-func (b registrationBuilder) reg(args ...interface{}) registrationBuilderArgs {
+func (s *State) reg(args ...interface{}) Callback {
 	if len(args) == 1 || len(args) == 2 {
 		switch args[0].(type) {
 		case Callback:
 			if len(args) == 1 {
-				return registrationBuilderArgs{args[0].(Callback), b.state}
+				return args[0].(Callback)
 			}
 		case string:
 			if len(args) == 2 {
 				switch args[1].(type) {
 				case Callback:
-					return registrationBuilderArgs{args[1].(Callback), args[0].(string)}
+					s.editing = args[0].(string)
+					return args[1].(Callback)
 				}
 			}
 		}
 	}
 	panic(ErrBuilderArgs)
-}
-
-type registrationBuilderArgs struct {
-	cb    Callback
-	state string
 }
