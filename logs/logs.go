@@ -11,12 +11,11 @@ type Logs struct {
 	LoggerMinor *log.Logger // Minor trace point
 	LoggerMajor *log.Logger // Major trace point
 	LoggerDebug *log.Logger // Debug info
+	LoggerNote  *log.Logger // Note
 	LoggerInfo  *log.Logger // Info
 	LoggerWarn  *log.Logger // Warning
 	LoggerError *log.Logger // Error
 	LoggerFatal *log.Logger // Fatal error
-
-	loggerReserved *log.Logger // Reserved for future use; pads to 8 pointers
 }
 
 func New(path string, info, debug, trace bool) (logs *Logs, err error) {
@@ -61,6 +60,7 @@ func (logs *Logs) Init(path string, info, debug, trace bool) error {
 	logs.LoggerMinor = log.New(wTrace, "-t-\t", logsFlags)
 	logs.LoggerMajor = log.New(wTrace, "-tr-\t", logsFlags)
 	logs.LoggerDebug = log.New(wDebug, "-dbg-\t", logsFlags)
+	logs.LoggerNote = log.New(logFile, "-note-\t", infoFlags)
 	logs.LoggerInfo = log.New(wInfo, "-info-\t", infoFlags)
 	logs.LoggerWarn = log.New(wWarn, "-WARN-\t", logsFlags)
 	logs.LoggerError = log.New(wError, "-ERROR-\t", logsFlags)
@@ -83,6 +83,12 @@ func (logs *Logs) Major(v ...interface{}) {
 func (logs *Logs) Debug(v ...interface{}) {
 	if logs != nil && logs.LoggerDebug != nil {
 		logs.LoggerDebug.Println(v...)
+	}
+}
+
+func (logs *Logs) Note(v ...interface{}) {
+	if logs != nil && logs.LoggerNote != nil {
+		logs.LoggerNote.Println(v...)
 	}
 }
 
