@@ -43,11 +43,15 @@ func (s *State) Init(fn func() bool) *State {
 }
 
 func (s *State) OnEnter(args ...interface{}) *State {
-	cb := s.reg(args...)
-	if Debug != nil {
-		Debug.Println("OnEnter(\"" + s.editing + "\")")
+	cb := s.reg(args...) // sets s.editing
+	editing := s.editing
+	if len(editing) < 1 {
+		panic(ErrNotEditing)
 	}
-	s.fns[s.editing + "{"] = cb
+	if Debug != nil {
+		Debug.Println("OnEnter(\"" + editing + "\")")
+	}
+	s.fns[editing + "{"] = cb
 	return s
 }
 
@@ -57,20 +61,28 @@ func (s *State) OnFail(onFail onfail.OnFail) *State {
 }
 
 func (s *State) OnFrame(args ...interface{}) *State {
-	cb := s.reg(args...)
-	if Debug != nil {
-		Debug.Println("OnFrame(\"" + s.editing + "\")")
+	cb := s.reg(args...) // sets s.editing
+	editing := s.editing
+	if len(editing) < 1 {
+		panic(ErrNotEditing)
 	}
-	s.fns[s.editing] = cb
+	if Debug != nil {
+		Debug.Println("OnFrame(\"" + editing + "\")")
+	}
+	s.fns[editing] = cb
 	return s
 }
 
 func (s *State) OnLeave(args ...interface{}) *State {
-	cb := s.reg(args...)
-	if Debug != nil {
-		Debug.Println("OnLeave(\"" + s.editing + "\")")
+	cb := s.reg(args...) // sets s.editing
+	editing := s.editing
+	if len(editing) < 1 {
+		panic(ErrNotEditing)
 	}
-	s.fns[s.editing + "}"] = cb
+	if Debug != nil {
+		Debug.Println("OnLeave(\"" + editing + "\")")
+	}
+	s.fns[editing + "}"] = cb
 	return s
 }
 
