@@ -12,6 +12,8 @@ import (
 
 var Debug, Note, Trace *log.Logger = nil, nil, nil
 
+var ErrNotEditing =
+	errors.New("State: unspecified or empty state in OnEnter/OnFrame/OnLeave")
 var ErrTooManyNames =
 	errors.New("State: Bad arguments to Run/RunOnce: must be () or (string)")
 
