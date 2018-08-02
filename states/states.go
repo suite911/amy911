@@ -53,6 +53,7 @@ func (s *State) OnEnter(args ...interface{}) *State {
 
 func (s *State) OnFail(onFail onfail.OnFail) *State {
 	s.onFail = onFail
+	return s
 }
 
 func (s *State) OnFrame(args ...interface{}) *State {
