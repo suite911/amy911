@@ -99,8 +99,9 @@ func (s *State) SetFps(fps float64) *State {
 }
 
 func (s *State) SetNext(state string, onFail ...onfail.OnFail) *State {
-	if _, ok := s.fns[str.Simp(state)]; ok {
-		s.next = state
+	simp := str.Simp(state)
+	if _, ok := s.fns[simp]; ok {
+		s.next = simp
 	} else {
 		onfail.Fail("Cannot advance to unregistered state: \"" + state + "\"", s, nil, onFail...)
 	}
