@@ -32,11 +32,12 @@ func InterfaceToError(err interface{}) error {
 var Default OnFail = Panic
 
 const LogDefaultFlags = log.Ldate | log.Ltime | log.Lmicroseconds | log.LUTC | log.Lshortfile
-var LogDefault = log.New(os.Stderr, "-FAIL-\t", LogDefaultFlags)
-var LogFatal *log.Logger = LogDefault
-var LogFatalTrace *log.Logger = LogDefault
-var LogPrint *log.Logger = LogDefault
-var LogPrintTrace *log.Logger = LogDefault
+const LogDefaultPrefixFatal = "-FATAL-\t"
+const LogDefaultPrefixPrint = "-WARN-\t"
+var LogFatal *log.Logger = log.New(os.Stderr, LogDefaultPrefixFatal, LogDefaultFlags)
+var LogFatalTrace *log.Logger = nil
+var LogPrint *log.Logger = log.New(os.Stderr, LogDefaultPrefixPrint, LogDefaultFlags)
+var LogPrintTrace *log.Logger = nil
 
 // Interface for types which can configure fail behavior
 type OnFail interface {
@@ -53,12 +54,12 @@ func (onFail OnFailCallFunction) Fail(err error, arg interface{}) {
 
 // Built-in fail behavior configuration to log fatally
 var Fatal OnFailCallFunction = func(err error, arg interface{}) {
-	LogFatal.Fatalln(err)
+	logFatalln(err, LogFatal, nil)
 }
 
 // Built-in fail behavior configuration to log fatally; with stack trace
 var FatalTrace OnFailCallFunction = func(err error, arg interface{}) {
-	LogFatalTrace.Fatalln(errors.WithStack(err))
+	logFatalln(err, LogFatalTrace, LogFatal)
 }
 
 // Built-in fail behavior configuration to ignore the error
@@ -77,12 +78,12 @@ var PanicTrace OnFailCallFunction = func(err error, arg interface{}) {
 
 // Built-in fail behavior configuration to log and continue
 var Print OnFailCallFunction = func(err error, arg interface{}) {
-	LogPrint.Println(err)
+	logPrintln(err, LogPrint, nil)
 }
 
 // Built-in fail behavior configuration to log and continue; with stack trace
 var PrintTrace OnFailCallFunction = func(err error, arg interface{}) {
-	LogPrintTrace.Println(errors.WithStack(err))
+	logPrintln(err, LogPrintTrace, LogPrint)
 }
 
 func fail(err error, arg interface{}, calleeConf OnFail, callerConf ...OnFail) {
@@ -97,5 +98,27 @@ func fail(err error, arg interface{}, calleeConf OnFail, callerConf ...OnFail) {
 		Panic.Fail(err, arg)
 	default:
 		panic(err)
+	}
+}
+
+func logFatalln(err error, one, two *log.Logger) {
+	switch {
+	case one != nil:
+		one.Fatalln(err)
+	case two != nil:
+		two.Fatalln(err)
+	default:
+		log.Fatalln()
+	}
+}
+
+func logPrintln(err error, one, two *log.Logger) {
+	switch {
+	case one != nil:
+		one.Println(err)
+	case two != nil:
+		two.Println(err)
+	default:
+		log.Println()
 	}
 }
