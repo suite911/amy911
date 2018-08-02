@@ -15,6 +15,8 @@ type Logs struct {
 	LoggerWarn  *log.Logger // Warning
 	LoggerError *log.Logger // Error
 	LoggerFatal *log.Logger // Fatal error
+
+	loggerReserved *log.Logger // Reserved for future use; pads to 8 pointers
 }
 
 func New(path string, info, debug, trace bool) (logs *Logs, err error) {
