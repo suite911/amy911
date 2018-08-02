@@ -124,6 +124,7 @@ func (s *State) reg(args ...interface{}) func(*State) {
 	case 1:
 		cb, ok := args[0].(func(*State))
 		if ok {
+Trace.Println("\"" + s.editing + "\"")
 			return cb
 		}
 	case 2:
@@ -131,6 +132,7 @@ func (s *State) reg(args ...interface{}) func(*State) {
 		cb, cok := args[1].(func(*State))
 		if nok && cok {
 			s.editing = str.Simp(name)
+Trace.Println("cb, \"" + s.editing + "\"")
 			return cb
 		}
 	}
