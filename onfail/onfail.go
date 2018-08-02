@@ -80,7 +80,7 @@ var PrintTrace OnFailCallFunction = func(err error, arg interface{}) {
 
 func fail(err error, arg interface{}, calleeConf OnFail, callerConf ...OnFail) {
 	switch {
-	case len(callerConf) >= 1:
+	case len(callerConf) >= 1 && callerConf[0] != nil:
 		callerConf[0].Fail(err, arg)
 	case calleeConf != nil:
 		calleeConf.Fail(err, arg)
