@@ -2,6 +2,7 @@ package onfail
 
 import (
 	"log"
+	"os"
 
 	"github.com/pkg/errors"
 )
