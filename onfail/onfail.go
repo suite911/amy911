@@ -8,19 +8,12 @@ import (
 
 // Helper function for configurable fail behavior
 func Fail (err, arg interface{}, calleeConf OnFail, callerConf ...OnFail) {
-	e := InterfaceToError(err)
-	switch {
-	case len(callerConf) >= 1:
-		callerConf[0].Fail(e, arg)
-	case calleeConf != nil:
-		calleeConf.Fail(e, arg)
-	case Default != nil: // but you should never set Default to nil
-		Default.Fail(e, arg)
-	case Panic != nil: // but you should never set Panic to nil
-		Panic.Fail(e, arg)
-	default:
-		panic(e)
-	}
+	fail(InterfaceToError(err), arg, calleeConf, callerConf...)
+}
+
+// Helper function for configurable fail behavior -- error plus string
+func FailEx (err error, msg string, arg interface{}, calleeConf OnFail, callerConf ...OnFail) {
+	fail(errors.WithMessage(err, msg), arg, calleeConf, callerConf...)
 }
 
 // An internal function; exported in case it is needed in user code
@@ -83,4 +76,19 @@ var Print OnFailCallFunction = func(err error, arg interface{}) {
 // Built-in fail behavior configuration to log and continue; with stack trace
 var PrintTrace OnFailCallFunction = func(err error, arg interface{}) {
 	log.Println(errors.WithStack(err))
+}
+
+func fail(err error, arg interface{}, calleeConf OnFail, callerConf ...OnFail) {
+	switch {
+	case len(callerConf) >= 1:
+		callerConf[0].Fail(err, arg)
+	case calleeConf != nil:
+		calleeConf.Fail(err, arg)
+	case Default != nil: // but you should never set Default to nil
+		Default.Fail(err, arg)
+	case Panic != nil: // but you should never set Panic to nil
+		Panic.Fail(err, arg)
+	default:
+		panic(err)
+	}
 }
