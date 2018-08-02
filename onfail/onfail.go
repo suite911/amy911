@@ -59,7 +59,7 @@ var Fatal OnFailCallFunction = func(err error, arg interface{}) {
 
 // Built-in fail behavior configuration to log fatally; with stack trace
 var FatalTrace OnFailCallFunction = func(err error, arg interface{}) {
-	logFatalln(err, LogFatalTrace, LogFatal)
+	logFatalln(errors.WithStack(err), LogFatalTrace, LogFatal)
 }
 
 // Built-in fail behavior configuration to ignore the error
@@ -83,7 +83,7 @@ var Print OnFailCallFunction = func(err error, arg interface{}) {
 
 // Built-in fail behavior configuration to log and continue; with stack trace
 var PrintTrace OnFailCallFunction = func(err error, arg interface{}) {
-	logPrintln(err, LogPrintTrace, LogPrint)
+	logPrintln(errors.WithStack(err), LogPrintTrace, LogPrint)
 }
 
 func fail(err error, arg interface{}, calleeConf OnFail, callerConf ...OnFail) {
