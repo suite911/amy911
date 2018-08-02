@@ -10,7 +10,7 @@ import (
 	"github.com/amyadzuki/amygolib/str"
 )
 
-var Trace *log.Logger = nil
+var Debug, Trace *log.Logger = nil, nil
 
 var ErrTooManyNames =
 	errors.New("State: Bad arguments to Run/RunOnce: must be () or (string)")
@@ -34,7 +34,6 @@ func New(fn func() bool) *State {
 }
 
 func (s *State) Init(fn func() bool) *State {
-Trace.Println("> Init")
 	s.fnCloseRequested = fn
 	s.fns = make(map[string]func(*State))
 	s.timestamp = time.Now()
@@ -42,28 +41,33 @@ Trace.Println("> Init")
 }
 
 func (s *State) OnEnter(args ...interface{}) *State {
-Trace.Println("> OnEnter")
 	cb := s.reg(args...)
+	if Debug != nil {
+		Debug.Println("OnEnter(\"" + s.editing + "\")")
+	}
 	s.fns[s.editing + "{"] = cb
 	return s
 }
 
-func (s *State) OnLeave(args ...interface{}) *State {
-Trace.Println("> OnLeave")
+func (s *State) OnFrame(args ...interface{}) *State {
 	cb := s.reg(args...)
-	s.fns[s.editing + "}"] = cb
-	return s
-}
-
-func (s *State) Register(args ...interface{}) *State {
-Trace.Println("> Register")
-	cb := s.reg(args...)
+	if Debug != nil {
+		Debug.Println("OnFrame(\"" + s.editing + "\")")
+	}
 	s.fns[s.editing] = cb
 	return s
 }
 
+func (s *State) OnLeave(args ...interface{}) *State {
+	cb := s.reg(args...)
+	if Debug != nil {
+		Debug.Println("OnLeave(\"" + s.editing + "\")")
+	}
+	s.fns[s.editing + "}"] = cb
+	return s
+}
+
 func (s *State) Run(name ...string) *State {
-Trace.Println("> Run")
 	switch len(name) {
 	case 0:
 	case 1:
@@ -78,7 +82,6 @@ Trace.Println("> Run")
 }
 
 func (s *State) RunOnce(name ...string) *State {
-Trace.Println("> RunOnce")
 	switch len(name) {
 	case 0:
 	case 1:
@@ -130,7 +133,6 @@ func (s *State) reg(args ...interface{}) func(*State) {
 	case 1:
 		cb, ok := args[0].(func(*State))
 		if ok {
-Trace.Println("\"" + s.editing + "\"")
 			return cb
 		}
 	case 2:
@@ -138,7 +140,6 @@ Trace.Println("\"" + s.editing + "\"")
 		cb, cok := args[1].(func(*State))
 		if nok && cok {
 			s.editing = str.Simp(name)
-Trace.Println("cb, \"" + s.editing + "\"")
 			return cb
 		}
 	}
