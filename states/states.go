@@ -11,14 +11,18 @@ import (
 var ErrTooManyNames =
 	errors.New("State: Bad arguments to Run/RunOnce: must be () or (string)")
 
+var MinimumSleepDuration = time.Millisecond
+
 type State struct {
 	Data interface{}
+	Dpf  float64
 
 	fnCloseRequested func() bool
 	fns              map[string]func(*State)
 	editing          string
 	sCurrent, sNext  string
 	state            string
+	timestamp        time.Time
 }
 
 func New(fn func() bool) *State {
@@ -28,6 +32,7 @@ func New(fn func() bool) *State {
 func (s *State) Init(fn func() bool) *State {
 	s.fnCloseRequested = fn
 	s.fns = make(map[string]func(*State))
+	s.timestamp = time.Now()
 	return s
 }
 
@@ -79,6 +84,12 @@ func (s *State) SetData(data interface{}) *State {
 	return s
 }
 
+func (s *State) SetFps(float64 fps) *State {
+	dpf := float64(time.Second) / fps
+	s.Dpf = time.Duration(dpf)
+	return s
+}
+
 func (s *State) SetNext(state string, onFail ...onfail.OnFail) *State {
 	if _, ok := s.fns[str.Simp(state)]; ok {
 		s.sNext = state
@@ -86,6 +97,18 @@ func (s *State) SetNext(state string, onFail ...onfail.OnFail) *State {
 		onfail.Fail("Unregistered state: \"" + state + "\"", s, nil, onFail...)
 	}
 	return s
+}
+
+func (s *State) Sleep() *State {
+	now := time.Now()
+	timestamp := s.timestamp
+	s.timestamp = now
+	elapsed := now.Sub(timestamp)
+	remaining := elapsed - s.Dpf
+	if remaining < MinimumSleepDuration {
+		remaining = MinimumSleepDuration
+	}
+	time.Sleep(remaining)
 }
 
 func (s *State) reg(args ...interface{}) func(*State) {
@@ -122,6 +145,7 @@ func (s *State) runOnce() {
 			leave(s)
 		}
 	}
+	s.Sleep()
 }
 
 func badBuilderArgs(args ...interface{}) error {
