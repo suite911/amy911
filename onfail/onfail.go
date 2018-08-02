@@ -3,10 +3,12 @@ package onfail
 import "log"
 
 // Helper function for configurable fail behavior
-func Fail (err error, arg interface{}, onFail ...OnFail) {
+func Fail (err error, arg interface{}, callee OnFail, caller ...OnFail) {
 	switch {
-	case len(onFail) >= 1:
-		onFail[0].Fail(err, arg)
+	case len(caller) >= 1:
+		caller[0].Fail(err, arg)
+	case callee != nil:
+		callee.Fail(err, arg)
 	case Default != nil:
 		Default.Fail(err, arg)
 	default:
