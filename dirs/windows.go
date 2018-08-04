@@ -2,26 +2,57 @@ package dirs
 
 // +build windows
 
-/*
-type Dirs struct {
-	...
-	sExecutableDirectory string
-	sSystemCache         string
-	sSystemConfig        string
-	sSystemData          string
-	sUserCache           string
-	sUserConfig          string
-	sUserData            string
-	sUserDesktop         string
-	sUserDocuments       string
-	sUserDownloads       string
-	sUserHome            string
-	sUserPictures        string
-	sUserScreenshots     string
-}
-*/
+import (
+	"os"
+	"path/filepath"
+	"syscall"
+	"unicode/utf16"
+	"unsafe"
+
+	"github.com/amyadzuki/amygolib/onfail"
+)
+
+const dwFlags uint32 =
+	0x00008000 | // KF_FLAG_CREATE
+	0x00000800 | // KF_FLAG_INIT
+	0x00000000   // KF_FLAG_DEFAULT
+
+var (
+	OLE32 = syscall.MustLoadDLL("OLE32.DLL")
+	CoTaskMemFree = OLE32.MustFindProc("CoTaskMemFree")
+	SHELL32 = syscall.MustLoadDLL("SHELL32.DLL")
+	SHGetKnownFolderPathW = SHELL32.MustFindProc("SHGetKnownFolderPathW")
+)
 
 func init() {
 	initDirs = func(d *Dirs, vendor, application string) {
+		d.sCache = filepath.Join(GetKnownFolderPath(&FOLDERID_InternetCache), vendor, application)
+		d.sConfig = filepath.Join(GetKnownFolderPath(&FOLDERID_RoamingAppData), vendor, application)
+		d.sData = filepath.Join(GetKnownFolderPath(&FOLDERID_LocalAppData), vendor, application)
+		d.sDesktop = GetKnownFolderPath(&FOLDERID_Desktop)
+		d.sDocuments = GetKnownFolderPath(&FOLDERID_Documents)
+		d.sDownloads = GetKnownFolderPath(&FOLDERID_Downloads)
+		d.sHome = GetKnownFolderPath(&FOLDERID_Profile)
+		d.sPictures = GetKnownFolderPath(&FOLDERID_Pictures)
+		d.sScreenshots = GetKnownFolderPath(&FOLDERID_Screenshots)
 	}
+}
+
+func GetKnownFolderPath(rfid unsafe.Pointer, onFail ...onfail.OnFail) (path string) {
+	var out *uint16
+	if 0 != SHGetKnownFolderPathW.Call(rfid, dwFlags, 0, &out) {
+		onfail.Fail("SHGetKnownFolderPathW reported an error", nil, onfail.Panic, onFail...)
+		return
+	}
+	len16 := 0
+	for p := out; *p != 0; p++ {
+		len16++
+	}
+	buf := make([]uint16, len16, len16)
+	for idx := 0; idx < len16; idx++ {
+		buf[idx] = out[idx]
+	}
+	CoTaskMemFree.Call(out)
+	path = string(utf16.Decode(buf))
+	return
 }
