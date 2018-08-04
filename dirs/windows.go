@@ -23,18 +23,16 @@ var (
 	SHGetKnownFolderPathW = SHELL32.MustFindProc("SHGetKnownFolderPathW")
 )
 
-func init() {
-	initDirs = func(d *Dirs, vendor, application string) {
-		d.sCache = filepath.Join(GetKnownFolderPath(&FOLDERID_InternetCache), vendor, application)
-		d.sConfig = filepath.Join(GetKnownFolderPath(&FOLDERID_RoamingAppData), vendor, application)
-		d.sData = filepath.Join(GetKnownFolderPath(&FOLDERID_LocalAppData), vendor, application)
-		d.sDesktop = GetKnownFolderPath(&FOLDERID_Desktop)
-		d.sDocuments = GetKnownFolderPath(&FOLDERID_Documents)
-		d.sDownloads = GetKnownFolderPath(&FOLDERID_Downloads)
-		d.sHome = GetKnownFolderPath(&FOLDERID_Profile)
-		d.sPictures = GetKnownFolderPath(&FOLDERID_Pictures)
-		d.sScreenshots = GetKnownFolderPath(&FOLDERID_Screenshots)
-	}
+func initDirs(d *Dirs, vendor, application string) {
+	d.sCache = filepath.Join(GetKnownFolderPath(&FOLDERID_InternetCache), vendor, application)
+	d.sConfig = filepath.Join(GetKnownFolderPath(&FOLDERID_RoamingAppData), vendor, application)
+	d.sData = filepath.Join(GetKnownFolderPath(&FOLDERID_LocalAppData), vendor, application)
+	d.sDesktop = GetKnownFolderPath(&FOLDERID_Desktop)
+	d.sDocuments = GetKnownFolderPath(&FOLDERID_Documents)
+	d.sDownloads = GetKnownFolderPath(&FOLDERID_Downloads)
+	d.sHome = GetKnownFolderPath(&FOLDERID_Profile)
+	d.sPictures = GetKnownFolderPath(&FOLDERID_Pictures)
+	d.sScreenshots = GetKnownFolderPath(&FOLDERID_Screenshots)
 }
 
 func GetKnownFolderPath(rfid unsafe.Pointer, onFail ...onfail.OnFail) (path string) {
