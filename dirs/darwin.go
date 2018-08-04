@@ -17,7 +17,6 @@ type Dirs struct {
 }
 */
 
-func init() {
-	initDirs = func(d *Dirs, vendor, application string) {
-	}
+func initDirs(d *Dirs, vendor, application string) {
+	panic("TODO: Darwin")
 }
