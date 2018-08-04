@@ -88,7 +88,3 @@ func (d *Dirs) Screenshots() string {
 func (d *Dirs) Vendor() string {
 	return d.vendor
 }
-
-var initDirs = func(d *Dirs, vendor, application string) {
-	panic(errors.New("OS not supported"))
-}
