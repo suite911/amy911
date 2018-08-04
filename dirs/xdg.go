@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-func init() {
+//func init() {
 	initDirs = func(d *Dirs, vendor, application string) {
 		home := os.Getenv("HOME")
 		if len(home) < 1 {
@@ -36,4 +36,4 @@ func init() {
 		d.sPictures = filepath.Join(home, "Pictures")
 		d.sScreenshots = filepath.Join(home, "Pictures", "Screenshots")
 	}
-}
+//}
