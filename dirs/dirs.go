@@ -1,5 +1,12 @@
 package dirs
 
+import (
+	"os"
+	"path/filepath"
+
+	"github.com/amyadzuki/amygolib/onfail"
+)
+
 type Dirs struct {
 	vendor, application string
 
@@ -18,8 +25,8 @@ type Dirs struct {
 	sUserScreenshots     string
 }
 
-func New(vendor, application string) IDirs {
-	return new(Dirs).Init(vendor, application)
+func New(vendor, application string, onFail ...onfail.OnFail) *Dirs {
+	return new(Dirs).Init(vendor, application, onFail...)
 }
 
 func (d *Dirs) Application() string {
@@ -30,8 +37,17 @@ func (d *Dirs) ExecutableDirectory() string {
 	return sExecutableDirectory
 }
 
-func (d *Dirs) Init(vendor, application string) IDirs {
+func (d *Dirs) Init(vendor, application string, onFail ...onfail.OnFail) *Dirs {
 	d.vendor, d.application = vendor, application
+	exedir, err := os.Executable()
+	if err == nil {
+		exedir, err = filepath.EvalSymlinks(exedir)
+	}
+	if err == nil {
+		d.sExecutableDirectory = exedir
+	} else {
+		onfail.Fail(err, nil, onfail.Panic, onFail...)
+	}
 	initDirs(d, vendor, application)
 	return d
 }
