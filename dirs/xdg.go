@@ -1,6 +1,6 @@
-package dirs
-
 // +build dragonfly,freebsd,linux,netbsd,openbsd,solaris
+
+package dirs
 
 import (
 	"os"
