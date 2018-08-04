@@ -1,7 +1,6 @@
 package dirs
 
 import (
-	"errors"
 	"os"
 	"path/filepath"
 
