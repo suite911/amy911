@@ -1,7 +1,5 @@
 package dirs
 
-import "errors"
-
 type Dirs struct {
 	vendor, application string
 
