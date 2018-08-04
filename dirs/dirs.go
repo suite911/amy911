@@ -41,7 +41,7 @@ func (d *Dirs) Init(vendor, application string, onFail ...onfail.OnFail) *Dirs {
 		exedir, err = filepath.EvalSymlinks(exedir)
 	}
 	if err == nil {
-		d.sExeDir = exedir
+		d.exedir = exedir
 	} else {
 		onfail.Fail(err, nil, onfail.Panic, onFail...)
 	}
