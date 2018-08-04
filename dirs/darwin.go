@@ -1,23 +1,19 @@
-package dirs
-
 // +build darwin
+
+package dirs
 
 /*
 type Dirs struct {
 	...
-	sExecutableDirectory string
-	sSystemCache         string
-	sSystemConfig        string
-	sSystemData          string
-	sUserCache           string
-	sUserConfig          string
-	sUserData            string
-	sUserDesktop         string
-	sUserDocuments       string
-	sUserDownloads       string
-	sUserHome            string
-	sUserPictures        string
-	sUserScreenshots     string
+	sCache           string
+	sConfig          string
+	sData            string
+	sDesktop         string
+	sDocuments       string
+	sDownloads       string
+	sHome            string
+	sPictures        string
+	sScreenshots     string
 }
 */
 
