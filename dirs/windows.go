@@ -1,9 +1,8 @@
-package dirs
-
 // +build windows
 
+package dirs
+
 import (
-	"os"
 	"path/filepath"
 	"syscall"
 	"unicode/utf16"
