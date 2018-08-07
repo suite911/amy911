@@ -65,7 +65,7 @@ func (d *Dirs) Init(vendor, application string, onFail ...onfail.OnFail) *Dirs {
 	d.vendor, d.application = vendor, application
 	exefile, err := os.Executable()
 	if err == nil {
-		exefile, err = filepath.EvalSymlinks(exedir)
+		exefile, err = filepath.EvalSymlinks(exefile)
 	}
 	if err == nil {
 		d.exedir = filepath.Dir(exefile)
