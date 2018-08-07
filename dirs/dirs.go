@@ -63,12 +63,12 @@ func (d *Dirs) Home() string {
 
 func (d *Dirs) Init(vendor, application string, onFail ...onfail.OnFail) *Dirs {
 	d.vendor, d.application = vendor, application
-	exedir, err := os.Executable()
+	exefile, err := os.Executable()
 	if err == nil {
-		exedir, err = filepath.EvalSymlinks(exedir)
+		exefile, err = filepath.EvalSymlinks(exedir)
 	}
 	if err == nil {
-		d.exedir = exedir
+		d.exedir = filepath.Dir(exefile)
 	} else {
 		onfail.Fail(err, nil, onfail.Panic, onFail...)
 	}
