@@ -12,9 +12,12 @@ go get -u github.com/amyadzuki/amygolib/...
 ## Imports
 ```go
 import "github.com/amyadzuki/amygolib/bitfield"
+import "github.com/amyadzuki/amygolib/dirs"
+import "github.com/amyadzuki/amygolib/logs"
 import "github.com/amyadzuki/amygolib/maths"
 import "github.com/amyadzuki/amygolib/onfail"
 import "github.com/amyadzuki/amygolib/query"
+import "github.com/amyadzuki/amygolib/states"
 import "github.com/amyadzuki/amygolib/str"
 ```
 
