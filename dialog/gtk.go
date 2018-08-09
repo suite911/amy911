@@ -70,17 +70,17 @@ type GtkLibrary struct {
 func (l *GtkLibrary) NewWindow(title string) Window {
 	var w GtkWindow
 	w.Window = gtk.NewWindow(gtk.WINDOW_TOPLEVEL)
-	w.Window.SetPosition(gtk.WIN_POS_CENTER)
-	w.Window.SetTitle(title)
-	w.Window.SetIconName("gtk-dialog-info")
-	w.Window.Connect("destroy", func(ctx *glib.CallbackContext) {
+	w.SetPosition(gtk.WIN_POS_CENTER)
+	w.SetTitle(title)
+	w.SetIconName("gtk-dialog-info")
+	w.Connect("destroy", func(ctx *glib.CallbackContext) {
 		gtk.MainQuit()
 	})
 	return w
 }
 
 type GtkWindow struct {
-	Window *gtk.Window
+	*gtk.Window
 }
 
 func (w *GtkWindow) NewFrame(title string) Frame {
