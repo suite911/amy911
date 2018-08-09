@@ -8,15 +8,30 @@ import (
 )
 
 var (
-	Init = func() {}
-	Quit = func() {}
+	fClose, fInit func()
 
-	Library ILibrary
+	iLibrary ILibrary
 
 	OverrideLogIn func(*Dialog, []interface{})
 
 	mutex sync.Mutex
 )
+
+func Close() {
+	if fClose != nil {
+		fClose()
+	}
+}
+
+func Library() ILibrary {
+	return iLibrary
+}
+
+func Init() {
+	if fInit != nil {
+		fInit()
+	}
+}
 
 type Dialog struct {
 	Embed, UserData interface{}
