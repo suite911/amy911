@@ -31,10 +31,10 @@ func (f GtkFrame) NewButtonGroup(out *int8, g *ButtonGroup) {
 	hbox := gtk.NewHBox(true, 1) // (homogeneous bool, spacing int)
 	for _, def := range g.Left {
 		b := gtk.NewButtonWithLabel(def.Label)
-		b.Clicked(func(result int8) {
+		b.Clicked(func(ctx *glib.CallbackContext) {
 			if out != nil {
-				fmt.Printf("> %d // %v\n", result, def)
-				*out = result
+				fmt.Printf("> %T: %v // %v\n", ctx.Data, def)
+//				*out = ctx.Data
 			}
 			f.GetTopLevel().Destroy()
 		}, def.Result)
