@@ -126,7 +126,7 @@ func fail(err error, arg interface{}, calleeConf OnFail, args interface{}) {
 	case OnFail:
 		set(args.(OnFail))
 	case []interface{}:
-		for _, arg := range args.([]interface) {
+		for _, arg := range args.([]interface{}) {
 			set(arg)
 		}
 	default:
