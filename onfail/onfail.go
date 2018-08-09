@@ -8,13 +8,13 @@ import (
 )
 
 // Helper function for configurable fail behavior
-func Fail (err, arg interface{}, calleeConf OnFail, callerArgs ...interface{}) {
-	fail(InterfaceToError(err), arg, calleeConf, callerArgs...)
+func Fail (err, arg interface{}, calleeConf OnFail, callerArgs interface{}) {
+	fail(InterfaceToError(err), arg, calleeConf, callerArgs)
 }
 
 // Helper function for configurable fail behavior -- error plus string
-func FailEx (err error, msg string, arg interface{}, calleeConf OnFail, callerArgs ...interface{}) {
-	fail(errors.WithMessage(err, msg), arg, calleeConf, callerArgs...)
+func FailEx (err error, msg string, arg interface{}, calleeConf OnFail, callerArgs interface{}) {
+	fail(errors.WithMessage(err, msg), arg, calleeConf, callerArgs)
 }
 
 // An internal function; exported in case it is needed in user code
@@ -111,12 +111,26 @@ var PrintTrace OnFailCallFunction = func(err error, arg interface{}) {
 	LogPrintln(errors.WithStack(err), LogPrintTrace, LogPrint)
 }
 
-func fail(err error, arg interface{}, calleeConf OnFail, callerArgs ...interface{}) {
+func fail(err error, arg interface{}, calleeConf OnFail, args interface{}) {
 	var callerConf OnFail
-	for _, arg := range callerArgs {
-		if conf, ok := arg.(OnFail); ok && conf != nil {
-			callerConf = conf
+	func set(arg interface{}) {
+		if callerOnFail, ok := arg.(OnFail); ok && callerOnFail != nil {
+			callerConf = callerOnFail
 		}
+	}
+	switch args.(type) {
+	case []OnFail:
+		for _, arg := range args.([]OnFail) {
+			set(arg)
+		}
+	case OnFail:
+		set(args.(OnFail))
+	case []interface{}:
+		for _, arg := range args.([]interface) {
+			set(arg)
+		}
+	default:
+		panic("Bad arguments to fail")
 	}
 	switch {
 	case callerConf != nil:
