@@ -6,8 +6,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/amyadzuki/amygolib/onfail"
-	"github.com/amyadzuki/amygolib/str"
+	"github.com/amy911/amy911/onfail"
+	"github.com/amy911/amy911/str"
 )
 
 var Debug, Note, Trace *log.Logger = nil, nil, nil
