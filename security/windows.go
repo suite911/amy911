@@ -11,7 +11,7 @@ import (
 )
 
 func chroot(path string, onFail onfail.OnFail) error {
-	err := ErrNotSupported
+	err := errNotSupported
 	onfail.Fail(err, path, onfail.Panic, onFail)
 	return err
 }
