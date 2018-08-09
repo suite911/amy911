@@ -31,13 +31,13 @@ func (f GtkFrame) NewButtonGroup(out *int8, g *ButtonGroup) {
 	hbox := gtk.NewHBox(true, 1) // (homogeneous bool, spacing int)
 	for _, def := range g.Left {
 		b := gtk.NewButtonWithLabel(def.Label)
-		b.Clicked(func() {
+		b.Clicked(func(result int8) {
 			if out != nil {
-				fmt.Printf("> %d // %v\n", def.Result, def)
-				*out = def.Result
+				fmt.Printf("> %d // %v\n", result, def)
+				*out = result
 			}
 			f.GetTopLevel().Destroy()
-		})
+		}, def.Result)
 		hbox.Add(b)
 	}
 	// TODO: right-align this one:
