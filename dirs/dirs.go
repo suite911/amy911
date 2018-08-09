@@ -70,7 +70,7 @@ func (d *Dirs) Init(vendor, application string, onFail ...onfail.OnFail) *Dirs {
 	if err == nil {
 		d.exedir = filepath.Dir(exefile)
 	} else {
-		onfail.Fail(err, nil, onfail.Panic, onFail...)
+		onfail.Fail(err, nil, onfail.Panic, onFail)
 	}
 	initDirs(d, vendor, application)
 	return d
