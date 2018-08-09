@@ -1,13 +1,13 @@
 // +build dragonfly freebsd linux netbsd openbsd solaris
 
-package dirs
+package syspath
 
 import (
 	"os"
 	"path/filepath"
 )
 
-func initDirs(d *Dirs, vendor, application string) {
+func initSysPath(sp *SysPath, vendor, application string) {
 	home := os.Getenv("HOME")
 	if len(home) < 1 {
 		panic("The HOME environment variable was unset!")
@@ -25,13 +25,13 @@ func initDirs(d *Dirs, vendor, application string) {
 		xdg_data_home = filepath.Join(home, ".local/share")
 	}
 
-	d.sCache = filepath.Join(xdg_cache_home, vendor, application)
-	d.sConfig = filepath.Join(xdg_config_home, vendor, application)
-	d.sData = filepath.Join(xdg_data_home, vendor, application)
-	d.sDesktop = filepath.Join(home, "Desktop")
-	d.sDocuments = filepath.Join(home, "Documents")
-	d.sDownloads = filepath.Join(home, "Downloads")
-	d.sHome = home
-	d.sPictures = filepath.Join(home, "Pictures")
-	d.sScreenshots = filepath.Join(home, "Pictures", "Screenshots")
+	sp.sCache = filepath.Join(xdg_cache_home, vendor, application)
+	sp.sConfig = filepath.Join(xdg_config_home, vendor, application)
+	sp.sData = filepath.Join(xdg_data_home, vendor, application)
+	sp.sDesktop = filepath.Join(home, "Desktop")
+	sp.sDocuments = filepath.Join(home, "Documents")
+	sp.sDownloads = filepath.Join(home, "Downloads")
+	sp.sHome = home
+	sp.sPictures = filepath.Join(home, "Pictures")
+	sp.sScreenshots = filepath.Join(home, "Pictures", "Screenshots")
 }
