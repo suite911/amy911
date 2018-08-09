@@ -33,6 +33,9 @@ func (f GtkFrame) NewEntry(out *string, password bool) {
 			e.SetText(placeholder)
 		}
 	}
+	if password {
+		e.SetVisibility(false)
+	}
 	f.Add(e)
 }
 
