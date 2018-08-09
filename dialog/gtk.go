@@ -47,17 +47,20 @@ type GtkLibrary struct {
 func (l GtkLibrary) NewWindow(title string) Window {
 	var w GtkWindow
 	w.Window = gtk.NewWindow(gtk.WINDOW_TOPLEVEL)
-	w.SetPosition(gtk.WIN_POS_CENTER)
-	w.SetTitle(title)
-	w.SetIconName("gtk-dialog-info")
-	w.Connect("destroy", func(ctx *glib.CallbackContext) {
+	w.Window.SetPosition(gtk.WIN_POS_CENTER)
+	w.Window.SetTitle(title)
+	w.Window.SetIconName("gtk-dialog-info")
+	w.Window.Connect("destroy", func(ctx *glib.CallbackContext) {
 		gtk.MainQuit()
 	})
+	w.VBox = gtk.NewVBox(true, 1) // (homogeneous bool, spacing int)
+	w.Window.Add(w.VBox)
 	return w
 }
 
 type GtkWindow struct {
-	*gtk.Window
+	Window *gtk.Window
+	*gtk.VBox
 }
 
 func (w GtkWindow) NewButtonGroup(out *int8, g *ButtonGroup) {
