@@ -13,7 +13,7 @@ func init() {
 	setUp(
 		func() {
 			gtk.Init(&os.Args)
-			iLibrary = &IGtkLibrary{}
+			iLibrary = &GtkLibrary{}
 		},
 		func() {
 		},
@@ -21,11 +21,11 @@ func init() {
 	Init()
 }
 
-type IGtkFrame struct {
+type GtkFrame struct {
 	*gtk.Frame
 }
 
-func (f IGtkFrame) NewButtonGroup(out *int8, g *ButtonGroup) {
+func (f GtkFrame) NewButtonGroup(out *int8, g *ButtonGroup) {
 	hbox := gtk.NewHBox(false, 1) // TODO: what are the args for?
 	for _, def := range g.Left {
 		b := gtk.NewButtonWithLabel(def.Label)
@@ -49,7 +49,7 @@ func (f IGtkFrame) NewButtonGroup(out *int8, g *ButtonGroup) {
 	f.Add(hbox)
 }
 
-func (f IGtkFrame) NewEntry(out *string, password bool) {
+func (f GtkFrame) NewEntry(out *string, password bool) {
 	e := gtk.NewEntry()
 	if out != nil {
 		if placeholder := *out; len(placeholder) > 0 {
@@ -59,16 +59,16 @@ func (f IGtkFrame) NewEntry(out *string, password bool) {
 	f.Add(e)
 }
 
-func (f IGtkFrame) NewLabel(text string) {
+func (f GtkFrame) NewLabel(text string) {
 	l := gtk.NewLabel(text)
 	f.Add(l)
 }
 
-type IGtkLibrary struct {
+type GtkLibrary struct {
 }
 
-func (l IGtkLibrary) NewWindow(title string) Window {
-	var w IGtkWindow
+func (l GtkLibrary) NewWindow(title string) Window {
+	var w GtkWindow
 	w.Window = gtk.NewWindow(gtk.WINDOW_TOPLEVEL)
 	w.SetPosition(gtk.WIN_POS_CENTER)
 	w.SetTitle(title)
@@ -79,18 +79,18 @@ func (l IGtkLibrary) NewWindow(title string) Window {
 	return w
 }
 
-type IGtkWindow struct {
+type GtkWindow struct {
 	*gtk.Window
 }
 
-func (w IGtkWindow) NewFrame(title string) Frame {
-	var f IGtkFrame
+func (w GtkWindow) NewFrame(title string) Frame {
+	var f GtkFrame
 	f.Frame = gtk.NewFrame(title)
-	w.Add(f)
+	w.Add(f.Frame)
 	return f
 }
 
-func (w IGtkWindow) Show(width, height int) {
+func (w GtkWindow) Show(width, height int) {
 	w.SetSizeRequest(width, height)
 	w.ShowAll()
 	gtk.Main()
