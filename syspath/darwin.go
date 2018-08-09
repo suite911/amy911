@@ -1,6 +1,6 @@
 // +build darwin
 
-package dirs
+package syspath
 
 /*
 type Dirs struct {
@@ -17,6 +17,6 @@ type Dirs struct {
 }
 */
 
-func initDirs(d *Dirs, vendor, application string) {
+func initSysPath(sp *SysPath, vendor, application string) {
 	panic("TODO: Darwin")
 }
