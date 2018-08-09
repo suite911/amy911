@@ -5,7 +5,10 @@ package dialog
 import (
 	"os"
 
-	"github.com/mattn/go-gtk"
+	"github.com/amyadzuki/amygolib/str"
+
+	"github.com/mattn/go-gtk/glib"
+	"github.com/mattn/go-gtk/gtk"
 )
 
 func init() {
@@ -25,6 +28,27 @@ type GtkFrame struct {
 }
 
 func (f *GtkFrame) NewButtonRow(out *bool, kind string) {
+	ok, cancel := "OK", "Cancel" // TODO: translate
+	switch simp := str.Simp(kind); simp {
+	case "yesno":
+		ok, cancel = "Yes", "No"
+	}
+	hbox := gtk.NewHBox(false, 1) // TODO: what are the args for?
+	bCancel := gtk.NewButtonWithLabel(cancel)
+	bOk := gtk.NewButtonWithLabel(ok)
+	bCancel.Clicked(func() {
+		*out = false
+		f.Frame.GetTopLevel().Destroy()
+	})
+	bOk.Clicked(func() {
+		*out = true
+		f.Frame.GetTopLevel().Destroy()
+	})
+	// ok/yes should always be to the left of cancel/no, which should be right-aligned
+	// TODO: right-align these
+	hbox.Add(bOk)
+	hbox.Add(bCancel)
+	f.Add(hbox)
 }
 
 func (f *GtkFrame) NewEntry(out *string, placeholder string, password bool) {
@@ -49,6 +73,9 @@ func (l *GtkLibrary) NewWindow(title string) Window {
 	w.Window.SetPosition(gtk.WIN_POS_CENTER)
 	w.Window.SetTitle(title)
 	w.Window.SetIconName("gtk-dialog-info")
+	w.Window.Connect("destroy", func(ctx *glib.CallbackContext) {
+		gtk.MainQuit()
+	})
 	return w
 }
 
