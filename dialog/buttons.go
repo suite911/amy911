@@ -9,11 +9,11 @@ import "github.com/amyadzuki/amygolib/str"
 //         "Cancel"
 //         "Apply (if present)"
 
-type Result int {
+const (
 	Cancel int8 = iota
 	Yes
 	No
-}
+)
 
 type ButtonDef struct {
 	Label  string
