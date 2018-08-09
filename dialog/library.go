@@ -7,8 +7,5 @@ func Library() ILibrary {
 }
 
 type ILibrary interface {
-	NewEntry(Node, string, bool)
-	NewFrame(Node, string) Node
-	NewLabel(Node, string)
-	NewWindow(string) Node
+	NewWindow(string) Window
 }
