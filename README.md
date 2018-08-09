@@ -21,6 +21,7 @@ import "github.com/amyadzuki/amygolib/query" // beta
 import "github.com/amyadzuki/amygolib/states" // beta
 import "github.com/amyadzuki/amygolib/str" // beta
 ```
+Assume any packages not listed in the above are pre-alpha.
 
 ## Usage Examples
 For now, see the README.md in each subdirectory for examples of that package.
