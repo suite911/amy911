@@ -14,8 +14,6 @@ const (
 	Yes
 	No
 )
-const Close = Cancel
-const Ok = Yes
 const LogIn = Yes // Yes, I have an account
 const Register = No // No, I do not have an account
 
@@ -34,10 +32,10 @@ func NewButtonGroup(kind string) *ButtonGroup {
 }
 
 func (g *ButtonGroup) Init(kind string) *ButtonGroup {
-	ok := ButtonDef{"OK", Ok} // TODO: translate
+	ok := ButtonDef{"OK", Yes} // TODO: translate
 	yes := ButtonDef{"Yes", Yes} // TODO: translate
 	no := ButtonDef{"No", No} // TODO: translate
-	close_ := ButtonDef{"Close", Close} // TODO: translate
+	close_ := ButtonDef{"Close", Cancel} // TODO: translate
 	cancel := ButtonDef{"Cancel", Cancel} // TODO: translate
 	login := ButtonDef{"Log In", LogIn} // TODO: translate
 	register := ButtonDef{"Register", Register} // TODO: translate
