@@ -11,15 +11,15 @@ type Dialog struct {
 	Embed, UserData interface{}
 }
 
-func New(type string, onFail ...onfail.OnFail) *Dialog {
-	return new(Dialog).Init(type, onFail...)
+func New(type string, args ...interface{}) *Dialog {
+	return new(Dialog).Init(type, args...)
 }
 
-func (d *Dialog) Init(type string, onFail ...onfail.OnFail) *Dialog {
+func (d *Dialog) Init(type string, args ...interface{}) *Dialog {
 	switch simp := str.Simp(type); simp {
 	// case "login":
 	default:
-		onfail.Fail("Unknown Dialog type \""+simp+"\"", d, onfail.Panic, onFail...)
+		onfail.Fail("Unknown Dialog type \""+simp+"\"", d, onfail.Panic, args...)
 	}
 	return d
 }
