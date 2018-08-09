@@ -24,7 +24,7 @@ type GtkFrame struct {
 	Frame *gtk.Frame
 }
 
-func (f *GtkFrame) NewEntry(placeholder string, password bool) {
+func (f *GtkFrame) NewEntry(out *string, placeholder string, password bool) {
 	e := gtk.NewEntry()
 	if len(placeholder) > 0 {
 		e.SetText(placeholder)
@@ -58,4 +58,10 @@ func (w *GtkWindow) NewFrame(title string) Window {
 	f.Frame = gtk.NewFrame(title)
 	w.Add(f)
 	return f
+}
+
+func (w *GtkWindow) Show(width, height int) {
+	w.SetSizeRequest(width, height)
+	w.ShowAll()
+	gtk.Main()
 }
