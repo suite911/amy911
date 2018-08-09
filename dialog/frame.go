@@ -1,7 +1,7 @@
 package dialog
 
 type Frame interface {
-	NewButtonRow(*bool, bool)
+	NewButtonRow(*bool, string)
 	NewEntry(*string, string, bool)
 	NewLabel(string)
 }
