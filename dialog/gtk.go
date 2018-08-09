@@ -97,7 +97,9 @@ func (w GtkWindow) NewFrame(title string) Frame {
 }
 
 func (w GtkWindow) Show(width, height int) {
-	// w.Window.SetSizeRequest(width, height)
+	if width > 0 && height > 0 {
+		w.Window.SetSizeRequest(width, height)
+	}
 	w.Window.ShowAll()
 	gtk.Main()
 }
