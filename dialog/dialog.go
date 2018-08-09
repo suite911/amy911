@@ -41,11 +41,11 @@ func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 			f := w.NewFrame("Account") // TODO: translate
 			if len(aps) >= 1 {
 				f.NewLabel("E-mail address:") // TODO: translate
-				f.NewEntry(aps[0], "", false)
+				f.NewEntry(aps[0], false)
 			}
 			if len(aps) >= 2 {
 				f.NewLabel("Password:") // TODO: translate
-				f.NewEntry(aps[1], "", true)
+				f.NewEntry(aps[1], true)
 			}
 			var out *int8
 			if len(api8) >= 1 {
