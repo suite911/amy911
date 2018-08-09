@@ -6,7 +6,10 @@ import (
 )
 
 var (
-	Library interface{}
+	Init = func() {}
+	Quit = func() {}
+
+	Library ILibrary
 
 	OverrideLogIn func(*Dialog, []interface{})
 )
@@ -15,23 +18,23 @@ type Dialog struct {
 	Embed, UserData interface{}
 }
 
-func New(type string, args ...interface{}) *Dialog {
-	return new(Dialog).Init(type, args...)
+func New(kind string, args ...interface{}) *Dialog {
+	return new(Dialog).Init(kind, args...)
 }
 
-func (d *Dialog) Init(type string, args ...interface{}) *Dialog {
+func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 	if Library == nil {
 		onfail.Fail("Dialog Library was not loaded or was unloaded", d, onfail.Panic, args...)
 		return d
 	}
-	switch simp := str.Simp(type); simp {
+	switch simp := str.Simp(kind); simp {
 	case "login":
 		if OverrideLogIn != nil {
 			OverrideLogIn(d, args)
 		} else {
 		}
 	default:
-		onfail.Fail("Unknown Dialog type \""+simp+"\"", d, onfail.Panic, args...)
+		onfail.Fail("Unknown Dialog kind \""+simp+"\"", d, onfail.Panic, args...)
 	}
 	return d
 }
