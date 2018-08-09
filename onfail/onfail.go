@@ -113,7 +113,7 @@ var PrintTrace OnFailCallFunction = func(err error, arg interface{}) {
 
 func fail(err error, arg interface{}, calleeConf OnFail, args interface{}) {
 	var callerConf OnFail
-	func set(arg interface{}) {
+	set := func(arg interface{}) {
 		if callerOnFail, ok := arg.(OnFail); ok && callerOnFail != nil {
 			callerConf = callerOnFail
 		}
