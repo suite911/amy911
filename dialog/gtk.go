@@ -22,11 +22,12 @@ func init() {
 }
 
 type GtkFrame struct {
-	*gtk.Frame
+	Frame *gtk.Frame
+	*gtk.VBox
 }
 
 func (f GtkFrame) NewButtonGroup(out *int8, g *ButtonGroup) {
-	hbox := gtk.NewHBox(false, 1) // TODO: what are the args for?
+	hbox := gtk.NewHBox(false, 1) // TODO: what do the args do? (homogenous bool, spacing int)
 	for _, def := range g.Left {
 		b := gtk.NewButtonWithLabel(def.Label)
 		b.Clicked(func() {
@@ -86,6 +87,8 @@ type GtkWindow struct {
 func (w GtkWindow) NewFrame(title string) Frame {
 	var f GtkFrame
 	f.Frame = gtk.NewFrame(title)
+	f.VBox = gtk.NewVBox(false, 1) // TODO: what do the args do? (homogenous bool, spacing int)
+	f.Frame.Add(f.VBox)
 	w.Add(f.Frame)
 	return f
 }
