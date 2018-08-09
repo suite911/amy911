@@ -51,10 +51,12 @@ func (f *GtkFrame) NewButtonGroup(out *int8, g *ButtonGroup) {
 	f.Add(hbox)
 }
 
-func (f *GtkFrame) NewEntry(out *string, placeholder string, password bool) {
+func (f *GtkFrame) NewEntry(out *string, password bool) {
 	e := gtk.NewEntry()
-	if len(placeholder) > 0 {
-		e.SetText(placeholder)
+	if out != nil {
+		if placeholder = *out; len(placeholder) > 0 {
+			e.SetText(placeholder)
+		}
 	}
 	f.Add(e)
 }
