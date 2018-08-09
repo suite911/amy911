@@ -27,27 +27,29 @@ type GtkFrame struct {
 	Frame *gtk.Frame
 }
 
-func (f *GtkFrame) NewButtonRow(out *bool, kind string) {
-	ok, cancel := "OK", "Cancel" // TODO: translate
-	switch simp := str.Simp(kind); simp {
-	case "yesno":
-		ok, cancel = "Yes", "No"
-	}
+func (f *GtkFrame) NewButtonGroup(out *int, g *ButtonGroup) {
 	hbox := gtk.NewHBox(false, 1) // TODO: what are the args for?
-	bCancel := gtk.NewButtonWithLabel(cancel)
-	bOk := gtk.NewButtonWithLabel(ok)
-	bCancel.Clicked(func() {
-		*out = false
+	for _, def := range g.Left {
+		b := gtk.NewButtonWithLabel(def.Label)
+		b.Clicked(func() {
+			if out != nil {
+				*out = def.Result
+			}
+			f.Frame.GetTopLevel().Destroy()
+		})
+		hbox.Add(b)
+	}
+	// TODO: right-align this one:
+	b := gtk.NewButtonWithLabel(g.Right.Label)
+	b.Clicked(func() {
+		if out != nil {
+			*out = g.Right.Result
+		}
 		f.Frame.GetTopLevel().Destroy()
 	})
-	bOk.Clicked(func() {
-		*out = true
+	hbox.Add(b)
 		f.Frame.GetTopLevel().Destroy()
 	})
-	// ok/yes should always be to the left of cancel/no, which should be right-aligned
-	// TODO: right-align these
-	hbox.Add(bOk)
-	hbox.Add(bCancel)
 	f.Add(hbox)
 }
 
