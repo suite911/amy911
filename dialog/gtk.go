@@ -22,7 +22,16 @@ type LibraryGtk struct {
 	Window *gtk.Window
 }
 
-func (l *LibraryGtk) NewWindow(title string) {
+func (l *LibraryGtk) NewEntry(node Node, placeholder string, password bool) {
+}
+
+func (l *LibraryGtk) NewFrame(node Node, label string) Node {
+}
+
+func (l *LibraryGtk) NewLabel(node Node, text string) {
+}
+
+func (l *LibraryGtk) NewWindow(title string) Node {
 	l.Window = gtk.NewWindow(gtk.WINDOW_TOPLEVEL)
 	l.Window.SetPosition(gtk.WIN_POS_CENTER)
 	l.Window.SetTitle(title)
