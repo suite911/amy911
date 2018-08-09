@@ -1,6 +1,6 @@
 package dialog
 
 type Window interface {
-	NewFrame(string) Frame
+	NewFrame(string) *Frame
 	Show(int, int)
 }
