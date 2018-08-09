@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	SetUp(
+	setUp(
 		func() {
 			gtk.Init(&os.Args)
 			Library = LibraryGtk{}
