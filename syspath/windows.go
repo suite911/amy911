@@ -1,6 +1,6 @@
 // +build windows
 
-package dirs
+package syspath
 
 import (
 	"path/filepath"
@@ -23,22 +23,22 @@ var (
 	SHGetKnownFolderPathW = SHELL32.MustFindProc("SHGetKnownFolderPathW")
 )
 
-func initDirs(d *Dirs, vendor, application string) {
-	d.sCache = filepath.Join(GetKnownFolderPath(&FOLDERID_InternetCache), vendor, application)
-	d.sConfig = filepath.Join(GetKnownFolderPath(&FOLDERID_RoamingAppData), vendor, application)
-	d.sData = filepath.Join(GetKnownFolderPath(&FOLDERID_LocalAppData), vendor, application)
-	d.sDesktop = GetKnownFolderPath(&FOLDERID_Desktop)
-	d.sDocuments = GetKnownFolderPath(&FOLDERID_Documents)
-	d.sDownloads = GetKnownFolderPath(&FOLDERID_Downloads)
-	d.sHome = GetKnownFolderPath(&FOLDERID_Profile)
-	d.sPictures = GetKnownFolderPath(&FOLDERID_Pictures)
-	d.sScreenshots = GetKnownFolderPath(&FOLDERID_Screenshots)
+func initSysPath(sp *SysPath, vendor, application string) {
+	sp.sCache = filepath.Join(GetKnownFolderPath(&FOLDERID_InternetCache), vendor, application)
+	sp.sConfig = filepath.Join(GetKnownFolderPath(&FOLDERID_RoamingAppData), vendor, application)
+	sp.sData = filepath.Join(GetKnownFolderPath(&FOLDERID_LocalAppData), vendor, application)
+	sp.sDesktop = GetKnownFolderPath(&FOLDERID_Desktop)
+	sp.sDocuments = GetKnownFolderPath(&FOLDERID_Documents)
+	sp.sDownloads = GetKnownFolderPath(&FOLDERID_Downloads)
+	sp.sHome = GetKnownFolderPath(&FOLDERID_Profile)
+	sp.sPictures = GetKnownFolderPath(&FOLDERID_Pictures)
+	sp.sScreenshots = GetKnownFolderPath(&FOLDERID_Screenshots)
 }
 
 func GetKnownFolderPath(rfid unsafe.Pointer, onFail ...onfail.OnFail) (path string) {
 	var out *uint16
 	if 0 != SHGetKnownFolderPathW.Call(rfid, dwFlags, 0, &out) {
-		onfail.Fail("SHGetKnownFolderPathW reported an error", nil, onfail.Panic, onFail...)
+		onfail.Fail("SHGetKnownFolderPathW reported an error", rfid, onfail.Panic, onFail...)
 		return
 	}
 	len16 := 0
