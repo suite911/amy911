@@ -25,13 +25,13 @@ func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 		return d
 	}
 	var aps []*string
-	var api []*int
+	var api8 []*int8
 	for _, arg := range args {
 		switch arg.(type) {
 		case *string:
 			aps = append(aps, arg.(*string))
-		case *int:
-			api = append(api, arg.(*int))
+		case *int8:
+			api8 = append(api8, arg.(*int8))
 		}
 	}
 	switch simp := str.Simp(kind); simp {
@@ -50,7 +50,7 @@ func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 				f.NewEntry(aps[1], "", true)
 			}
 			if len(abs) >= 1 {
-				f.NewButtonGroup(api[0], "login")
+				f.NewButtonGroup(api8[0], "login")
 			} else {
 				f.NewButtonClose("login")
 			}
