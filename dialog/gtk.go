@@ -3,6 +3,7 @@
 package dialog
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/mattn/go-gtk/glib"
@@ -32,6 +33,7 @@ func (f GtkFrame) NewButtonGroup(out *int8, g *ButtonGroup) {
 		b := gtk.NewButtonWithLabel(def.Label)
 		b.Clicked(func() {
 			if out != nil {
+				fmt.Printf("> %d // %v\n", def.Result, def)
 				*out = def.Result
 			}
 			f.GetTopLevel().Destroy()
