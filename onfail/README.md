@@ -13,7 +13,7 @@ package main
 import "github.com/amyadzuki/amystuff/onfail"
 
 func gowrong(onFail ...onfail.OnFail) {
-	onfail.Fail("Oh noes, something went wrong! >~<", nil, onfail.Fatal, onFail...)
+	onfail.Fail("Oh noes, something went wrong! >~<", nil, onfail.Fatal, onFail)
 }
 
 func main() {
