@@ -71,6 +71,9 @@ type ILibrary interface {
 
 func setUp(fInit_, fClose_ func()) {
 	mutex.Lock(); defer mutex.Unlock()
+	if iLibrary != nil {
+		return
+	}
 	fClose = fClose_
 	fInit = fInit_
 }
