@@ -1,6 +1,8 @@
 package dialog
 
 import (
+	"sync"
+
 	"github.com/amyadzuki/amygolib/onfail"
 	"github.com/amyadzuki/amygolib/str"
 )
@@ -12,6 +14,8 @@ var (
 	Library ILibrary
 
 	OverrideLogIn func(*Dialog, []interface{})
+
+	mutex sync.Mutex
 )
 
 type Dialog struct {
