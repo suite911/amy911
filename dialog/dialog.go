@@ -60,3 +60,9 @@ func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 
 type ILibrary interface {
 }
+
+func setUp(fInit_, fClose_ func()) {
+	mutex.Lock(); defer mutex.Unlock()
+	fClose = fClose_
+	fInit = fInit_
+}
