@@ -2,9 +2,6 @@ package dialog
 
 import (
 	"sync"
-
-	"github.com/amyadzuki/amygolib/onfail"
-	"github.com/amyadzuki/amygolib/str"
 )
 
 var (
