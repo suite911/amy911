@@ -19,4 +19,12 @@ func init() {
 }
 
 type LibraryGtk struct {
+	Window *gtk.Window
+}
+
+func (l *LibraryGtk) NewWindow(title string) {
+	l.Window = gtk.NewWindow(gtk.WINDOW_TOPLEVEL)
+	l.Window.SetPosition(gtk.WIN_POS_CENTER)
+	l.Window.SetTitle(title)
+	l.Window.SetIconName("gtk-dialog-info")
 }
