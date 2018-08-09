@@ -4,7 +4,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/amyadzuki/amygolib/onfail"
+	"github.com/amy911/amy911/onfail"
 )
 
 type Dirs struct {
