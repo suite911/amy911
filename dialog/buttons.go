@@ -15,9 +15,14 @@ type Result int {
 	No
 }
 
+type ButtonDef struct {
+	Label  string
+	Result int8
+}
+
 type ButtonGroup struct {
-	Left []string
-	Right string
+	Left []ButtonDef
+	Right ButtonDef
 }
 
 func NewButtonGroup(kind string) *ButtonGroup {
@@ -25,18 +30,26 @@ func NewButtonGroup(kind string) *ButtonGroup {
 }
 
 func (g *ButtonGroup) Init(kind string) *ButtonGroup {
-	g.Left = []string{"OK"}
-	g.Right = "Cancel"
+	ok := ButtonDef{"OK", Yes} // TODO: translate
+	yes := ButtonDef{"Yes", Yes} // TODO: translate
+	no := ButtonDef{"No", No} // TODO: translate
+	close_ := ButtonDef{"Close", Cancel} // TODO: translate
+	cancel := ButtonDef{"Cancel", Cancel} // TODO: translate
+	register := ButtonDef{"Register", No} // do you have an account? no // TODO: translate
+	login := ButtonDef{"Log In", Yes} // TODO: translate
+
+	g.Left = []ButtonDef{ok}
+	g.Right = cancel
 	switch simp := str.Simp(kind); simp {
 	case "ok":
-		g.Left = []string{}
-		g.Right = "OK" // TODO: translate
+		g.Left = []ButtonDef{}
+		g.Right = ok
 	case "close", "error", "problem", "warning":
-		g.Left = []string{}
-		g.Right = "Close" // TODO: translate
+		g.Left = []ButtonDef{}
+		g.Right = close_
 	case "yesno", "yesnocancel":
-		g.Left = []string{"Yes", "No"} // TODO: translate
-		g.Right = "Cancel" // TODO: translate
+		g.Left = []ButtonDef{yes, no}
+		g.Right = cancel
 	}
 	return g
 }
