@@ -37,7 +37,7 @@ func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 		if OverrideLogIn != nil {
 			OverrideLogIn(d, args)
 		} else {
-			w := Library.NewWindow("Log in") // TODO: translate
+			w := Library().NewWindow("Log in") // TODO: translate
 			f := w.NewFrame("Account") // TODO: translate
 			if len(aps) >= 1 {
 				f.NewLabel("E-mail address:") // TODO: translate
@@ -48,7 +48,7 @@ func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 				f.NewEntry(aps[1], "", true)
 			}
 			var out *int8
-			if len(abs) >= 1 {
+			if len(api8) >= 1 {
 				out = api8[0]
 			}
 			f.NewButtonGroup(out, NewButtonGroup("login"))
