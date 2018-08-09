@@ -7,5 +7,5 @@ func Library() ILibrary {
 }
 
 type ILibrary interface {
-	NewWindow(string) Window
+	NewWindow(string) *Window
 }
