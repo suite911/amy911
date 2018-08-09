@@ -10,8 +10,6 @@ import (
 var (
 	fClose, fInit func()
 
-	iLibrary ILibrary
-
 	OverrideLogIn func(*Dialog, []interface{})
 
 	mutex sync.Mutex
@@ -25,10 +23,6 @@ func Close() {
 	if fClose != nil {
 		fClose()
 	}
-}
-
-func Library() ILibrary {
-	return iLibrary
 }
 
 func Init() {
