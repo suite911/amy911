@@ -8,32 +8,8 @@ import (
 )
 
 var (
-	fClose, fInit func()
-
 	OverrideLogIn func(*Dialog, []interface{})
-
-	mutex sync.Mutex
 )
-
-func Close() {
-	mutex.Lock(); defer mutex.Unlock()
-	if iLibrary == nil {
-		return
-	}
-	if fClose != nil {
-		fClose()
-	}
-}
-
-func Init() {
-	mutex.Lock(); defer mutex.Unlock()
-	if iLibrary != nil {
-		return
-	}
-	if fInit != nil {
-		fInit()
-	}
-}
 
 type Dialog struct {
 	Embed, UserData interface{}
@@ -58,13 +34,4 @@ func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 		onfail.Fail("Unknown Dialog kind \""+simp+"\"", d, onfail.Panic, args...)
 	}
 	return d
-}
-
-func setUp(fInit_, fClose_ func()) {
-	mutex.Lock(); defer mutex.Unlock()
-	if iLibrary != nil {
-		return
-	}
-	fClose = fClose_
-	fInit = fInit_
 }
