@@ -8,7 +8,7 @@ import (
 	"unicode/utf16"
 	"unsafe"
 
-	"github.com/amyadzuki/amygolib/onfail"
+	"github.com/amy911/amy911/onfail"
 )
 
 const dwFlags uint32 =
