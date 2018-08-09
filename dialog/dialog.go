@@ -1,8 +1,6 @@
 package dialog
 
 import (
-	"sync"
-
 	"github.com/amyadzuki/amygolib/onfail"
 	"github.com/amyadzuki/amygolib/str"
 )
@@ -21,7 +19,7 @@ func New(kind string, args ...interface{}) *Dialog {
 
 func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 	if Library == nil {
-		onfail.Fail("Dialog Library was not loaded or was unloaded", d, onfail.Panic, args...)
+		onfail.Fail("Dialog Library was not loaded or was unloaded", d, onfail.Panic, args)
 		return d
 	}
 	var aps []*string
@@ -57,7 +55,7 @@ func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 			w.Show(576, 324)
 		}
 	default:
-		onfail.Fail("Unknown Dialog kind \""+simp+"\"", d, onfail.Panic, args...)
+		onfail.Fail("Unknown Dialog kind \""+simp+"\"", d, onfail.Panic, args)
 	}
 	return d
 }
