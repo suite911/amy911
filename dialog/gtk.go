@@ -13,7 +13,7 @@ func init() {
 	setUp(
 		func() {
 			gtk.Init(&os.Args)
-			iLibrary = GtkLibrary{}
+			iLibrary = &GtkLibrary{}
 		},
 		func() {
 		},
@@ -22,7 +22,7 @@ func init() {
 }
 
 type GtkFrame struct {
-	Frame *gtk.Frame
+	*gtk.Frame
 }
 
 func (f *GtkFrame) NewButtonGroup(out *int8, g *ButtonGroup) {
@@ -33,7 +33,7 @@ func (f *GtkFrame) NewButtonGroup(out *int8, g *ButtonGroup) {
 			if out != nil {
 				*out = def.Result
 			}
-			f.Frame.GetTopLevel().Destroy()
+			f.GetTopLevel().Destroy()
 		})
 		hbox.Add(b)
 	}
@@ -43,7 +43,7 @@ func (f *GtkFrame) NewButtonGroup(out *int8, g *ButtonGroup) {
 		if out != nil {
 			*out = g.Right.Result
 		}
-		f.Frame.GetTopLevel().Destroy()
+		f.GetTopLevel().Destroy()
 	})
 	hbox.Add(b)
 	f.Add(hbox)
