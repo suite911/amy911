@@ -10,7 +10,7 @@ import "github.com/amyadzuki/amygolib/str"
 //         "Apply (if present)"
 
 type Result int {
-	Cancel = iota
+	Cancel int8 = iota
 	Yes
 	No
 }
