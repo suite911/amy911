@@ -1,3 +1,4 @@
+// +build freebsd linux netbsd openbsd solaris
 package dialog
 
 import (
