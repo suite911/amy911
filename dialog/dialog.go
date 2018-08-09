@@ -66,9 +66,6 @@ func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 	return d
 }
 
-type ILibrary interface {
-}
-
 func setUp(fInit_, fClose_ func()) {
 	mutex.Lock(); defer mutex.Unlock()
 	if iLibrary != nil {
