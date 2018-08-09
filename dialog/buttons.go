@@ -1,6 +1,6 @@
 package dialog
 
-import "github.com/amyadzuki/amygolib/str"
+import "github.com/amy911/amy911/str"
 
 // From <https://docs.microsoft.com/en-us/windows/desktop/uxguide/top-violations>
 //     "Present the commit buttons in the following order:"
