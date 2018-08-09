@@ -24,6 +24,9 @@ type GtkFrame struct {
 	Frame *gtk.Frame
 }
 
+func (f *GtkFrame) NewButtonRow(out *bool, kind string) {
+}
+
 func (f *GtkFrame) NewEntry(out *string, placeholder string, password bool) {
 	e := gtk.NewEntry()
 	if len(placeholder) > 0 {
