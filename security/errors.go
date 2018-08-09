@@ -2,4 +2,8 @@ package security
 
 import "errors"
 
-const ErrNotSupported = errors.New("Not supported")
+var errNotSupported = errors.New("Not supported")
+
+func ErrNotSupported() error {
+	return errNotSupported
+}
