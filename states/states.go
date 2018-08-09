@@ -118,7 +118,7 @@ func (s *State) SetNext(state string, onFail ...onfail.OnFail) *State {
 	if _, ok := s.fns[state]; ok {
 		s.next = state
 	} else {
-		onfail.Fail("Cannot advance to unregistered state: \"" + state + "\"", s, s.onFail, onFail...)
+		onfail.Fail("Cannot advance to unregistered state: \"" + state + "\"", s, s.onFail, onFail)
 	}
 	return s
 }
@@ -176,7 +176,7 @@ func (s *State) runOnce(onFail ...onfail.OnFail) {
 			leave(s)
 		}
 	} else {
-		onfail.Fail("Cannot run unregistered state: \"" + state + "\"", s, s.onFail, onFail...)
+		onfail.Fail("Cannot run unregistered state: \"" + state + "\"", s, s.onFail, onFail)
 	}
 	s.Sleep()
 }
