@@ -7,12 +7,14 @@ import (
 )
 
 func init() {
-	Init = func() {
-		gtk.Init(&os.Args)
-		Library = LibraryGtk{}
-	}
-	Quit = func() {
-	}
+	SetUp(
+		func() {
+			gtk.Init(&os.Args)
+			Library = LibraryGtk{}
+		},
+		func() {
+		},
+	)
 	Init()
 }
 
