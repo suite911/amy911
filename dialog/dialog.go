@@ -29,6 +29,13 @@ func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 		if OverrideLogIn != nil {
 			OverrideLogIn(d, args)
 		} else {
+			w := Library.NewWindow("Log in") // TODO: translate
+			f := w.NewFrame("Account") // TODO: translate
+			f.NewLabel("E-mail address:") // TODO: translate
+			f.NewEntry("", false)
+			f.NewLabel("Password:") // TODO: translate
+			f.NewEntry("", true)
+			w.Show(576, 324)
 		}
 	default:
 		onfail.Fail("Unknown Dialog kind \""+simp+"\"", d, onfail.Panic, args...)
