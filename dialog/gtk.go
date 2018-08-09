@@ -67,7 +67,7 @@ func (f *GtkFrame) NewLabel(text string) {
 type GtkLibrary struct {
 }
 
-func (l *GtkLibrary) NewWindow(title string) Window {
+func (l *GtkLibrary) NewWindow(title string) *Window {
 	var w GtkWindow
 	w.Window = gtk.NewWindow(gtk.WINDOW_TOPLEVEL)
 	w.SetPosition(gtk.WIN_POS_CENTER)
@@ -83,7 +83,7 @@ type GtkWindow struct {
 	*gtk.Window
 }
 
-func (w *GtkWindow) NewFrame(title string) Frame {
+func (w *GtkWindow) NewFrame(title string) *Frame {
 	var f GtkFrame
 	f.Frame = gtk.NewFrame(title)
 	w.Add(f)
