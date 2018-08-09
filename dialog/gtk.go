@@ -48,8 +48,6 @@ func (f *GtkFrame) NewButtonGroup(out *int8, g *ButtonGroup) {
 		f.Frame.GetTopLevel().Destroy()
 	})
 	hbox.Add(b)
-		f.Frame.GetTopLevel().Destroy()
-	})
 	f.Add(hbox)
 }
 
