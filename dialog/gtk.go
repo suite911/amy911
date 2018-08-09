@@ -53,7 +53,7 @@ func (l GtkLibrary) NewWindow(title string) Window {
 	w.Window.Connect("destroy", func(ctx *glib.CallbackContext) {
 		gtk.MainQuit()
 	})
-	w.VBox = gtk.NewVBox(true, 1) // (homogeneous bool, spacing int)
+	w.VBox = gtk.NewVBox(false, 36) // (homogeneous bool, spacing int)
 	w.Window.Add(w.VBox)
 	return w
 }
