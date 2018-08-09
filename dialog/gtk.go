@@ -26,30 +26,6 @@ type GtkFrame struct {
 	*gtk.VBox
 }
 
-func (f GtkFrame) NewButtonGroup(out *int8, g *ButtonGroup) {
-	hbox := gtk.NewHBox(true, 1) // (homogeneous bool, spacing int)
-	for _, def := range g.Left {
-		b := gtk.NewButtonWithLabel(def.Label)
-		b.Clicked(func(ctx *glib.CallbackContext) {
-			if out != nil {
-				*out = ctx.Data().(int8)
-			}
-			f.GetTopLevel().Destroy()
-		}, def.Result)
-		hbox.Add(b)
-	}
-	// TODO: right-align this one:
-	b := gtk.NewButtonWithLabel(g.Right.Label)
-	b.Clicked(func() {
-		if out != nil {
-			*out = g.Right.Result
-		}
-		f.GetTopLevel().Destroy()
-	})
-	hbox.Add(b)
-	f.Add(hbox)
-}
-
 func (f GtkFrame) NewEntry(out *string, password bool) {
 	e := gtk.NewEntry()
 	if out != nil {
@@ -82,6 +58,30 @@ func (l GtkLibrary) NewWindow(title string) Window {
 
 type GtkWindow struct {
 	*gtk.Window
+}
+
+func (w GtkWindow) NewButtonGroup(out *int8, g *ButtonGroup) {
+	hbox := gtk.NewHBox(true, 1) // (homogeneous bool, spacing int)
+	for _, def := range g.Left {
+		b := gtk.NewButtonWithLabel(def.Label)
+		b.Clicked(func(ctx *glib.CallbackContext) {
+			if out != nil {
+				*out = ctx.Data().(int8)
+			}
+			w.GetTopLevel().Destroy()
+		}, def.Result)
+		hbox.Add(b)
+	}
+	// TODO: right-align this one:
+	b := gtk.NewButtonWithLabel(g.Right.Label)
+	b.Clicked(func() {
+		if out != nil {
+			*out = g.Right.Result
+		}
+		w.GetTopLevel().Destroy()
+	})
+	hbox.Add(b)
+	w.Add(hbox)
 }
 
 func (w GtkWindow) NewFrame(title string) Frame {
