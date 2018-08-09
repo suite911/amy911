@@ -52,7 +52,7 @@ func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 			if len(abs) >= 1 {
 				f.NewButtonGroup(api[0], "login")
 			} else {
-				f.NewButtonSingle("login")
+				f.NewButtonClose("login")
 			}
 			w.Show(576, 324)
 		}
