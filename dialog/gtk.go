@@ -33,8 +33,7 @@ func (f GtkFrame) NewButtonGroup(out *int8, g *ButtonGroup) {
 		b := gtk.NewButtonWithLabel(def.Label)
 		b.Clicked(func(ctx *glib.CallbackContext) {
 			if out != nil {
-				fmt.Printf("> %T: %v // %v\n", ctx.Data(), ctx.Data(), def)
-//				*out = ctx.Data()
+				*out = ctx.Data().(int8)
 			}
 			f.GetTopLevel().Destroy()
 		}, def.Result)
