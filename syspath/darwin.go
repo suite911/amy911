@@ -3,7 +3,7 @@
 package syspath
 
 /*
-type Dirs struct {
+type SysPath struct {
 	...
 	sCache           string
 	sConfig          string
