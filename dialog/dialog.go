@@ -24,6 +24,16 @@ func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 		onfail.Fail("Dialog Library was not loaded or was unloaded", d, onfail.Panic, args...)
 		return d
 	}
+	var aps []*string
+	var api []*int
+	for _, arg := range args {
+		switch arg.(type) {
+		case *string:
+			aps = append(aps, arg.(*string))
+		case *int:
+			api = append(api, arg.(*int))
+		}
+	}
 	switch simp := str.Simp(kind); simp {
 	case "login":
 		if OverrideLogIn != nil {
@@ -31,10 +41,19 @@ func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 		} else {
 			w := Library.NewWindow("Log in") // TODO: translate
 			f := w.NewFrame("Account") // TODO: translate
-			f.NewLabel("E-mail address:") // TODO: translate
-			f.NewEntry("", false)
-			f.NewLabel("Password:") // TODO: translate
-			f.NewEntry("", true)
+			if len(aps) >= 1 {
+				f.NewLabel("E-mail address:") // TODO: translate
+				f.NewEntry(aps[0], "", false)
+			}
+			if len(aps) >= 2 {
+				f.NewLabel("Password:") // TODO: translate
+				f.NewEntry(aps[1], "", true)
+			}
+			if len(abs) >= 1 {
+				f.NewButtonGroup(api[0], "login")
+			} else {
+				f.NewButtonSingle("login")
+			}
 			w.Show(576, 324)
 		}
 	default:
