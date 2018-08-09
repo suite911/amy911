@@ -27,7 +27,7 @@ type GtkFrame struct {
 	Frame *gtk.Frame
 }
 
-func (f *GtkFrame) NewButtonGroup(out *int, g *ButtonGroup) {
+func (f *GtkFrame) NewButtonGroup(out *int8, g *ButtonGroup) {
 	hbox := gtk.NewHBox(false, 1) // TODO: what are the args for?
 	for _, def := range g.Left {
 		b := gtk.NewButtonWithLabel(def.Label)
