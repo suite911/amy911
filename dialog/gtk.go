@@ -5,8 +5,6 @@ package dialog
 import (
 	"os"
 
-	"github.com/amyadzuki/amygolib/str"
-
 	"github.com/mattn/go-gtk/glib"
 	"github.com/mattn/go-gtk/gtk"
 )
@@ -15,7 +13,7 @@ func init() {
 	setUp(
 		func() {
 			gtk.Init(&os.Args)
-			Library = LibraryGtk{}
+			iLibrary = GtkLibrary{}
 		},
 		func() {
 		},
