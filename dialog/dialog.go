@@ -51,7 +51,7 @@ func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 			if len(api8) >= 1 {
 				out = api8[0]
 			}
-			f.NewButtonGroup(out, NewButtonGroup("login"))
+			w.NewButtonGroup(out, NewButtonGroup("login"))
 			w.Show(576, 324)
 		}
 	default:
