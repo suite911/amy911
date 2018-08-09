@@ -61,7 +61,7 @@ func (sp *SysPath) Home() string {
 	return sp.sHome
 }
 
-func (sp *SysPath) Init(vendor, application string, onFail ...onfail.OnFail) *Dirs {
+func (sp *SysPath) Init(vendor, application string, onFail ...onfail.OnFail) *SysPath {
 	sp.vendor, sp.application = vendor, application
 	exefile, err := os.Executable()
 	if err == nil {
@@ -72,7 +72,7 @@ func (sp *SysPath) Init(vendor, application string, onFail ...onfail.OnFail) *Di
 	} else {
 		onfail.Fail(err, exefile, onfail.Panic, onFail)
 	}
-	initDirs(sp, vendor, application)
+	initSysPath(sp, vendor, application)
 	return sp
 }
 
