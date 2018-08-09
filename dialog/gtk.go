@@ -18,22 +18,42 @@ func init() {
 	Init()
 }
 
-type LibraryGtk struct {
+type GtkFrame struct {
+	Frame *gtk.Frame
+}
+
+func (f *GtkFrame) NewEntry(placeholder string, password bool) {
+	e := gtk.NewEntry()
+	if len(placeholder) > 0 {
+		e.SetText(placeholder)
+	}
+	f.Add(e)
+}
+
+func (f *GtkFrame) NewLabel(text string) {
+	l := gtk.NewLabel(text)
+	f.Add(l)
+}
+
+type GtkLibrary struct {
+}
+
+func (l *GtkLibrary) NewWindow(title string) Window {
+	var w GtkWindow
+	w.Window = gtk.NewWindow(gtk.WINDOW_TOPLEVEL)
+	w.Window.SetPosition(gtk.WIN_POS_CENTER)
+	w.Window.SetTitle(title)
+	w.Window.SetIconName("gtk-dialog-info")
+	return w
+}
+
+type GtkWindow struct {
 	Window *gtk.Window
 }
 
-func (l *LibraryGtk) NewEntry(node Node, placeholder string, password bool) {
-}
-
-func (l *LibraryGtk) NewFrame(node Node, label string) Node {
-}
-
-func (l *LibraryGtk) NewLabel(node Node, text string) {
-}
-
-func (l *LibraryGtk) NewWindow(title string) Node {
-	l.Window = gtk.NewWindow(gtk.WINDOW_TOPLEVEL)
-	l.Window.SetPosition(gtk.WIN_POS_CENTER)
-	l.Window.SetTitle(title)
-	l.Window.SetIconName("gtk-dialog-info")
+func (w *GtkWindow) NewFrame(title string) Window {
+	var f GtkFrame
+	f.Frame = gtk.NewFrame(title)
+	w.Add(f)
+	return f
 }
