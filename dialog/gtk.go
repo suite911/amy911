@@ -3,7 +3,6 @@
 package dialog
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/mattn/go-gtk/glib"
