@@ -52,7 +52,8 @@ func (f *GtkFrame) NewButtonGroup(out *int8, g *ButtonGroup) {
 func (f *GtkFrame) NewEntry(out *string, password bool) {
 	e := gtk.NewEntry()
 	if out != nil {
-		if placeholder = *out; len(placeholder) > 0 {
+		placeholder = *out
+		if len(placeholder) > 0 {
 			e.SetText(placeholder)
 		}
 	}
@@ -83,7 +84,7 @@ type GtkWindow struct {
 	Window *gtk.Window
 }
 
-func (w *GtkWindow) NewFrame(title string) Window {
+func (w *GtkWindow) NewFrame(title string) Frame {
 	var f GtkFrame
 	f.Frame = gtk.NewFrame(title)
 	w.Add(f)
