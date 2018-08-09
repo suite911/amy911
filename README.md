@@ -11,14 +11,15 @@ go get -u github.com/amyadzuki/amygolib/...
 
 ## Imports
 ```go
-import "github.com/amyadzuki/amygolib/bitfield"
-import "github.com/amyadzuki/amygolib/dirs"
-import "github.com/amyadzuki/amygolib/logs"
-import "github.com/amyadzuki/amygolib/maths"
-import "github.com/amyadzuki/amygolib/onfail"
-import "github.com/amyadzuki/amygolib/query"
-import "github.com/amyadzuki/amygolib/states"
-import "github.com/amyadzuki/amygolib/str"
+import "github.com/amyadzuki/amygolib/bitfield" // beta
+import "github.com/amyadzuki/amygolib/dialog" // alpha
+import "github.com/amyadzuki/amygolib/dirs" // beta
+import "github.com/amyadzuki/amygolib/logs" // beta
+import "github.com/amyadzuki/amygolib/maths" // beta
+import "github.com/amyadzuki/amygolib/onfail" // beta
+import "github.com/amyadzuki/amygolib/query" // beta
+import "github.com/amyadzuki/amygolib/states" // beta
+import "github.com/amyadzuki/amygolib/str" // beta
 ```
 
 ## Usage Examples
