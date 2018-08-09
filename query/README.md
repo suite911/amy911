@@ -3,7 +3,7 @@ The `query` package is designed to save time when using databases.  It has only 
 
 ## Imports
 ```go
-import "github.com/amyadzuki/amystuff/query"
+import "github.com/amy911/amy911/query"
 ```
 
 ## Usage Examples
@@ -12,7 +12,9 @@ package example
 
 import (
 	"database/sql"
-	"github.com/amyadzuki/amystuff/query"
+
+	"github.com/amy911/amy911/query"
+
 	_ "github.com/mattn/go-sqlite3"
 )
 
