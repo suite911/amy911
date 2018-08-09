@@ -10,7 +10,7 @@ import (
 	"github.com/amy911/amy911/onfail"
 )
 
-func chroot(path string, onFail onfail.OnFail) error {
+func chroot(path string, onFail interface{}) error {
 	if err := unix.Chroot(path); err != nil {
 		onfail.Fail(err, path, onfail.Panic, onFail)
 		return err
