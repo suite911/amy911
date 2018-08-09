@@ -18,6 +18,10 @@ var (
 )
 
 func Close() {
+	mutex.Lock(); defer mutex.Unlock()
+	if iLibrary == nil {
+		return
+	}
 	if fClose != nil {
 		fClose()
 	}
@@ -28,6 +32,10 @@ func Library() ILibrary {
 }
 
 func Init() {
+	mutex.Lock(); defer mutex.Unlock()
+	if iLibrary != nil {
+		return
+	}
 	if fInit != nil {
 		fInit()
 	}
