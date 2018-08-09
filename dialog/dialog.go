@@ -38,3 +38,6 @@ func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 	}
 	return d
 }
+
+type ILibrary interface {
+}
