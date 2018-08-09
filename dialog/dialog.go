@@ -49,11 +49,11 @@ func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 				f.NewLabel("Password:") // TODO: translate
 				f.NewEntry(aps[1], "", true)
 			}
+			var out *int8
 			if len(abs) >= 1 {
-				f.NewButtonGroup(api8[0], "login")
-			} else {
-				f.NewButtonClose("login")
+				out = api8[0]
 			}
+			f.NewButtonGroup(out, NewButtonGroup("login"))
 			w.Show(576, 324)
 		}
 	default:
