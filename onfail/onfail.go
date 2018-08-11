@@ -8,13 +8,13 @@ import (
 )
 
 // Helper function for configurable fail behavior
-func Fail (err, arg interface{}, calleeConf OnFail, callerArgs interface{}) {
-	fail(InterfaceToError(err), arg, calleeConf, callerArgs)
+func Fail (err, arg interface{}, calleeConf OnFail, callerArgs interface{}) error {
+	return fail(InterfaceToError(err), arg, calleeConf, callerArgs)
 }
 
 // Helper function for configurable fail behavior -- error plus string
-func FailEx (err error, msg string, arg interface{}, calleeConf OnFail, callerArgs interface{}) {
-	fail(errors.WithMessage(err, msg), arg, calleeConf, callerArgs)
+func FailEx (err error, msg string, arg interface{}, calleeConf OnFail, callerArgs interface{}) error {
+	return fail(errors.WithMessage(err, msg), arg, calleeConf, callerArgs)
 }
 
 // An internal function; exported in case it is needed in user code
@@ -111,7 +111,7 @@ var PrintTrace OnFailCallFunction = func(err error, arg interface{}) {
 	LogPrintln(errors.WithStack(err), LogPrintTrace, LogPrint)
 }
 
-func fail(err error, arg interface{}, calleeConf OnFail, args interface{}) {
+func fail(err error, arg interface{}, calleeConf OnFail, args interface{}) error {
 	var callerConf OnFail
 	set := func(arg interface{}) {
 		if callerOnFail, ok := arg.(OnFail); ok && callerOnFail != nil {
@@ -144,4 +144,5 @@ func fail(err error, arg interface{}, calleeConf OnFail, args interface{}) {
 	default:
 		panic(err)
 	}
+	return err
 }
