@@ -6,6 +6,20 @@
 # amy911
 A [free](https://creativecommons.org/publicdomain/zero/1.0/) miscellaneous library for Google Go (golang).
 
+## API Stability
+- bitfield ![api-beta](https://rawgit.com/amy911/assets/master/shields/api-beta-yellowgreen.svg)
+- dialog ![api-pre-alpha](https://rawgit.com/amy911/assets/master/shields/api-pre--alpha-red.svg)
+- logs ![api-alpha](https://rawgit.com/amy911/assets/master/shields/api-alpha-orange.svg)
+- maths ![api-candidate](https://rawgit.com/amy911/assets/master/shields/api-candidate-green.svg)
+- onfail ![api-candidate](https://rawgit.com/amy911/assets/master/shields/api-candidate-green.svg)
+- query ![api-alpha](https://rawgit.com/amy911/assets/master/shields/api-alpha-orange.svg)
+- security ![api-candidate](https://rawgit.com/amy911/assets/master/shields/api-candidate-green.svg)
+- states ![api-alpha](https://rawgit.com/amy911/assets/master/shields/api-alpha-orange.svg)
+- str ![api-candidate](https://rawgit.com/amy911/assets/master/shields/api-candidate-green.svg)
+- syspath ![api-pre-alpha](https://rawgit.com/amy911/assets/master/shields/api-pre--alpha-red.svg)
+
+Assume any packages not listed in the above are pre-alpha.
+
 ## License
 This library is [truly free](https://creativecommons.org/publicdomain/zero/1.0/), not GNU-encumbered "free software".  Use it for any purpose, even commercial.  Attribution is appreciated but not required.
 
@@ -27,19 +41,6 @@ import "github.com/amy911/amy911/states"
 import "github.com/amy911/amy911/str"
 import "github.com/amy911/amy911/syspath"
 ```
-
-## API Stability
-- bitfield ![api-beta](https://rawgit.com/amy911/assets/master/shields/api-beta-yellowgreen.svg)
-- dialog ![api-pre-alpha](https://rawgit.com/amy911/assets/master/shields/api-pre--alpha-red.svg)
-- logs ![api-alpha](https://rawgit.com/amy911/assets/master/shields/api-alpha-orange.svg)
-- maths ![api-candidate](https://rawgit.com/amy911/assets/master/shields/api-candidate-green.svg)
-- onfail ![api-candidate](https://rawgit.com/amy911/assets/master/shields/api-candidate-green.svg)
-- query ![api-alpha](https://rawgit.com/amy911/assets/master/shields/api-alpha-orange.svg)
-- security ![api-candidate](https://rawgit.com/amy911/assets/master/shields/api-candidate-green.svg)
-- states ![api-alpha](https://rawgit.com/amy911/assets/master/shields/api-alpha-orange.svg)
-- str ![api-candidate](https://rawgit.com/amy911/assets/master/shields/api-candidate-green.svg)
-- syspath ![api-pre-alpha](https://rawgit.com/amy911/assets/master/shields/api-pre--alpha-red.svg)
-Assume any packages not listed in the above are pre-alpha.
 
 ## Usage Examples
 For now, see the README.md in each subdirectory for examples of that package.
