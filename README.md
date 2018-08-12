@@ -7,10 +7,10 @@
 A [free](https://creativecommons.org/publicdomain/zero/1.0/) miscellaneous library for Google Go (golang).
 
 ## API Stability
-- bitfield ![api-beta](https://rawgit.com/amy911/assets/master/shields/api-beta-yellowgreen.svg)
+- bitfield ![api-stable](https://rawgit.com/amy911/assets/master/shields/api-stable-brightgreen.svg)
 - dialog ![api-pre-alpha](https://rawgit.com/amy911/assets/master/shields/api-pre--alpha-red.svg)
 - logs ![api-alpha](https://rawgit.com/amy911/assets/master/shields/api-alpha-orange.svg)
-- maths ![api-candidate](https://rawgit.com/amy911/assets/master/shields/api-candidate-green.svg)
+- maths ![api-beta](https://rawgit.com/amy911/assets/master/shields/api-beta-yellowgreen.svg)
 - onfail ![api-candidate](https://rawgit.com/amy911/assets/master/shields/api-candidate-green.svg)
 - query ![api-alpha](https://rawgit.com/amy911/assets/master/shields/api-alpha-orange.svg)
 - security ![api-candidate](https://rawgit.com/amy911/assets/master/shields/api-candidate-green.svg)
