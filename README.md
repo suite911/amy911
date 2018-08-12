@@ -1,4 +1,4 @@
-![api-alpha](https://rawgit.com/amy911/assets/master/shields/api-alpha-red.svg)
+![api-alpha](https://rawgit.com/amy911/assets/master/shields/api-alpha-orange.svg)
 ![abi-unstable](https://rawgit.com/amy911/assets/master/shields/abi-unstable-red.svg)
 [![Build Status](https://travis-ci.org/amy911/amy911.svg?branch=master)](https://travis-ci.org/amy911/amy911)
 [![CC0-1.0](https://rawgit.com/amy911/assets/master/shields/license-cc0--1.0-efbfff.svg)](https://raw.githubusercontent.com/amy911/cloud911/master/LICENSE.txt)
@@ -29,14 +29,14 @@ import "github.com/amy911/amy911/syspath"
 ```
 
 ## API Stability
-- bitfield ![api-beta](https://rawgit.com/amy911/assets/master/shields/api-beta-orange.svg)
+- bitfield ![api-beta](https://rawgit.com/amy911/assets/master/shields/api-beta-yellowgreen.svg)
 - dialog ![api-pre-alpha](https://rawgit.com/amy911/assets/master/shields/api-pre--alpha-red.svg)
-- logs ![api-alpha](https://rawgit.com/amy911/assets/master/shields/api-alpha-red.svg)
+- logs ![api-alpha](https://rawgit.com/amy911/assets/master/shields/api-alpha-orange.svg)
 - maths ![api-candidate](https://rawgit.com/amy911/assets/master/shields/api-candidate-green.svg)
 - onfail ![api-candidate](https://rawgit.com/amy911/assets/master/shields/api-candidate-green.svg)
-- query ![api-alpha](https://rawgit.com/amy911/assets/master/shields/api-alpha-red.svg)
+- query ![api-alpha](https://rawgit.com/amy911/assets/master/shields/api-alpha-orange.svg)
 - security ![api-candidate](https://rawgit.com/amy911/assets/master/shields/api-candidate-green.svg)
-- states ![api-alpha](https://rawgit.com/amy911/assets/master/shields/api-alpha-red.svg)
+- states ![api-alpha](https://rawgit.com/amy911/assets/master/shields/api-alpha-orange.svg)
 - str ![api-candidate](https://rawgit.com/amy911/assets/master/shields/api-candidate-green.svg)
 - syspath ![api-pre-alpha](https://rawgit.com/amy911/assets/master/shields/api-pre--alpha-red.svg)
 Assume any packages not listed in the above are pre-alpha.
