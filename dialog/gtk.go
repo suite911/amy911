@@ -22,6 +22,7 @@ func init() {
 }
 
 type GtkFrame struct {
+	PWatchedEntries *[]WatchedEntry
 	Frame *gtk.Frame
 	*gtk.VBox
 }
@@ -35,7 +36,7 @@ func (f GtkFrame) NewEntry(out *string, password bool) {
 		if placeholder := *out; len(placeholder) > 0 {
 			e.SetText(placeholder)
 		}
-		f.WatchedEntries = append(f.WatchedEntries, WatchedEntry{e, out})
+		*f.PWatchedEntries = append(*f.PWatchedEntries, WatchedEntry{e, out})
 	}
 	/*
 	e.Connect("insert-text", func(ctx *glib.CallbackContext) {
@@ -109,6 +110,7 @@ func (w GtkWindow) NewButtonGroup(out *int8, g *ButtonGroup) {
 
 func (w GtkWindow) NewFrame(title string) Frame {
 	var f GtkFrame
+	f.PWatchedEntries = &w.WatchedEntries
 	f.Frame = gtk.NewFrame(title)
 	f.VBox = gtk.NewVBox(true, 1) // (homogeneous bool, spacing int)
 	f.Frame.Add(f.VBox)
