@@ -61,6 +61,7 @@ type GtkLibrary struct {
 
 func (l GtkLibrary) NewWindow(title string) Window {
 	var w GtkWindow
+	w.PWatchedEntries = new([]WatchedEntries)
 	w.Window = gtk.NewWindow(gtk.WINDOW_TOPLEVEL)
 	w.Window.SetPosition(gtk.WIN_POS_CENTER)
 	w.Window.SetTitle(title)
@@ -79,8 +80,8 @@ type WatchedEntry struct {
 }
 
 type GtkWindow struct {
-	WatchedEntries []WatchedEntry
-	Window         *gtk.Window
+	PWatchedEntries *[]WatchedEntry
+	Window          *gtk.Window
 	*gtk.VBox
 }
 
@@ -92,12 +93,9 @@ func (w GtkWindow) NewButtonGroup(out *int8, g *ButtonGroup) {
 			if out != nil {
 				*out = ctx.Data().(int8)
 			}
-			fmt.Println("Debug:")
-			for _, we := range w.WatchedEntries {
-				fmt.Println(" >> ", we.Entry.GetText())
+			for _, we := range *w.PWatchedEntries {
 				*we.Out = we.Entry.GetText()
 			}
-			fmt.Println("End debug.")
 			w.GetTopLevel().Destroy()
 		}, def.Result)
 		hbox.Add(b)
@@ -108,7 +106,7 @@ func (w GtkWindow) NewButtonGroup(out *int8, g *ButtonGroup) {
 		if out != nil {
 			*out = g.Right.Result
 		}
-		for _, we := range w.WatchedEntries {
+		for _, we := range *w.WatchedEntries {
 			*we.Out = we.Entry.GetText()
 		}
 		w.GetTopLevel().Destroy()
