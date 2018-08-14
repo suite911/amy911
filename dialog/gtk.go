@@ -3,6 +3,7 @@
 package dialog
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/mattn/go-gtk/glib"
@@ -36,7 +37,9 @@ func (f GtkFrame) NewEntry(out *string, password bool) {
 		if placeholder := *out; len(placeholder) > 0 {
 			e.SetText(placeholder)
 		}
+		fmt.Println("Append:", len(*f.PWatchedEntries))
 		*f.PWatchedEntries = append(*f.PWatchedEntries, WatchedEntry{Entry: e, Out: out})
+		fmt.Println(" >>", len(*f.PWatchedEntries))
 	}
 	/*
 	e.Connect("insert-text", func(ctx *glib.CallbackContext) {
@@ -89,9 +92,12 @@ func (w GtkWindow) NewButtonGroup(out *int8, g *ButtonGroup) {
 			if out != nil {
 				*out = ctx.Data().(int8)
 			}
+			fmt.Println("Debug:")
 			for _, we := range w.WatchedEntries {
+				fmt.Println(" >> ", we.Entry.GetText())
 				*we.Out = we.Entry.GetText()
 			}
+			fmt.Println("End debug.")
 			w.GetTopLevel().Destroy()
 		}, def.Result)
 		hbox.Add(b)
