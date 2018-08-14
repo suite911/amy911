@@ -36,7 +36,7 @@ func (f GtkFrame) NewEntry(out *string, password bool) {
 		if placeholder := *out; len(placeholder) > 0 {
 			e.SetText(placeholder)
 		}
-		*f.PWatchedEntries = append(*f.PWatchedEntries, WatchedEntry{e, out})
+		*f.PWatchedEntries = append(*f.PWatchedEntries, WatchedEntry{Entry: e, Out: out})
 	}
 	/*
 	e.Connect("insert-text", func(ctx *glib.CallbackContext) {
