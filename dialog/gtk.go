@@ -105,7 +105,7 @@ func (w GtkWindow) NewButtonGroup(out *int8, g *ButtonGroup) {
 		if out != nil {
 			*out = g.Right.Result
 		}
-		for _, we := range *w.WatchedEntries {
+		for _, we := range *w.PWatchedEntries {
 			*we.Out = we.Entry.GetText()
 		}
 		w.GetTopLevel().Destroy()
@@ -116,7 +116,7 @@ func (w GtkWindow) NewButtonGroup(out *int8, g *ButtonGroup) {
 
 func (w GtkWindow) NewFrame(title string) Frame {
 	var f GtkFrame
-	f.PWatchedEntries = &w.WatchedEntries
+	f.PWatchedEntries = w.PWatchedEntries
 	f.Frame = gtk.NewFrame(title)
 	f.VBox = gtk.NewVBox(true, 1) // (homogeneous bool, spacing int)
 	f.Frame.Add(f.VBox)
