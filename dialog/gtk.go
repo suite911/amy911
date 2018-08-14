@@ -36,9 +36,7 @@ func (f GtkFrame) NewEntry(out *string, password bool) {
 		if placeholder := *out; len(placeholder) > 0 {
 			e.SetText(placeholder)
 		}
-		fmt.Println("Append:", len(*f.PWatchedEntries))
 		*f.PWatchedEntries = append(*f.PWatchedEntries, WatchedEntry{Entry: e, Out: out})
-		fmt.Println(" >>", len(*f.PWatchedEntries))
 	}
 	/*
 	e.Connect("insert-text", func(ctx *glib.CallbackContext) {
@@ -60,7 +58,7 @@ type GtkLibrary struct {
 
 func (l GtkLibrary) NewWindow(title string) Window {
 	var w GtkWindow
-	w.PWatchedEntries = new([]WatchedEntries)
+	w.PWatchedEntries = new([]WatchedEntry)
 	w.Window = gtk.NewWindow(gtk.WINDOW_TOPLEVEL)
 	w.Window.SetPosition(gtk.WIN_POS_CENTER)
 	w.Window.SetTitle(title)
