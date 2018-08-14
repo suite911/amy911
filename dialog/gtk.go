@@ -28,14 +28,22 @@ type GtkFrame struct {
 
 func (f GtkFrame) NewEntry(out *string, password bool) {
 	e := gtk.NewEntry()
+	if password {
+		e.SetVisibility(false)
+	}
 	if out != nil {
 		if placeholder := *out; len(placeholder) > 0 {
 			e.SetText(placeholder)
 		}
+		f.WatchedEntries = append(f.WatchedEntries, WatchedEntry{e, out})
 	}
-	if password {
-		e.SetVisibility(false)
-	}
+	/*
+	e.Connect("insert-text", func(ctx *glib.CallbackContext) {
+		if out != nil {
+			*out = e.GetText()
+		}
+	})
+	*/
 	f.Add(e)
 }
 
@@ -54,6 +62,9 @@ func (l GtkLibrary) NewWindow(title string) Window {
 	w.Window.SetTitle(title)
 	w.Window.SetIconName("gtk-dialog-info")
 	w.Window.Connect("destroy", func(ctx *glib.CallbackContext) {
+		for _, we := range w.WatchedEntries {
+			*we.Out = we.Entry.GetText()
+		}
 		gtk.MainQuit()
 	})
 	w.VBox = gtk.NewVBox(false, 36) // (homogeneous bool, spacing int)
@@ -61,8 +72,14 @@ func (l GtkLibrary) NewWindow(title string) Window {
 	return w
 }
 
+type WatchedEntry struct {
+	Entry *gtk.Entry
+	Out   *string
+}
+
 type GtkWindow struct {
-	Window *gtk.Window
+	WatchedEntries []WatchedEntry
+	Window         *gtk.Window
 	*gtk.VBox
 }
 
