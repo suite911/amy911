@@ -63,9 +63,6 @@ func (l GtkLibrary) NewWindow(title string) Window {
 	w.Window.SetTitle(title)
 	w.Window.SetIconName("gtk-dialog-info")
 	w.Window.Connect("destroy", func(ctx *glib.CallbackContext) {
-		for _, we := range w.WatchedEntries {
-			*we.Out = we.Entry.GetText()
-		}
 		gtk.MainQuit()
 	})
 	w.VBox = gtk.NewVBox(false, 36) // (homogeneous bool, spacing int)
@@ -92,6 +89,9 @@ func (w GtkWindow) NewButtonGroup(out *int8, g *ButtonGroup) {
 			if out != nil {
 				*out = ctx.Data().(int8)
 			}
+			for _, we := range w.WatchedEntries {
+				*we.Out = we.Entry.GetText()
+			}
 			w.GetTopLevel().Destroy()
 		}, def.Result)
 		hbox.Add(b)
@@ -101,6 +101,9 @@ func (w GtkWindow) NewButtonGroup(out *int8, g *ButtonGroup) {
 	b.Clicked(func() {
 		if out != nil {
 			*out = g.Right.Result
+		}
+		for _, we := range w.WatchedEntries {
+			*we.Out = we.Entry.GetText()
 		}
 		w.GetTopLevel().Destroy()
 	})
