@@ -43,6 +43,10 @@ func (d *Dialog) Init(kind string, args ...interface{}) *Dialog {
 				f.NewLabel("E-mail address:") // TODO: translate
 				f.NewEntry(aps[0], false)
 			}
+			if len(aps) >= 3 {
+				f.NewLabel("Username:") // TODO: translate
+				f.NewEntry(aps[2], false)
+			}
 			if len(aps) >= 2 {
 				f.NewLabel("Password:") // TODO: translate
 				f.NewEntry(aps[1], true)
